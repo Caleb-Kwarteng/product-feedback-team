@@ -93,6 +93,18 @@ const editFeedback =  (req,res)=>{
 
 }
 
+const deleteFeedback = (req,res)=>{
+    const id = parseInt(req.params.id);
+    pool.query('DELETE FROM product_features WHERE id = $1',[id],(error,results)=>{
+        if(error){
+            res.send(error.message);
+            throw error;
+        }
+        res.status(200).send(`Feedback deleted with ID: ${id}`);
+
+    });
+}
+
 
 
 
