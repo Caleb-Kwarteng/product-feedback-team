@@ -14,20 +14,20 @@ app.get("/",(req,res)=>{
 
 });
 
-//Create a feedback
+//Create a user
 
 const addUser = async(req,res)=>{
     try{
-        const {id,name,username,image,password} = req.body;
-        await pool.query('INSERT INTO users (id,name,username,image,password) VALUES ($1,$2,$3,$4,$5) RETURNING *',
-        [id,name,username,image,password],(error,result)=>{
+        const {name,username,image,password} = req.body;
+        await pool.query('INSERT INTO users (name,username,image,password) VALUES ($1,$2,$3,$4) RETURNING *',
+        [name,username,image,password],(error,result)=>{
             if(error){
                 res.send(error.message);
                 throw error;
 
             }
            
-            res.status(200).send("new user added");
+            res.status(201).send(`new user added with ID: ${result.rows[0].id}`);
 
         });
 
@@ -40,17 +40,18 @@ const addUser = async(req,res)=>{
 
 const productRequest = async (req,res)=>{
     try{
-        const {id,title, category,description,status,upvotes}=req.body;
-     
-        await pool.query('INSERT INTO product_features (id,title,category,description,status,upvotes) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *', 
-        [id,title,category,description,status,upvotes],(error,results)=>{
+
+        const {title,category,description,status,upvotes}=req.body;
+    
+        await pool.query('INSERT INTO product_features (title,category,description,status,upvotes) VALUES ($1,$2,$3,$4,$5) RETURNING *', 
+        [title,category,description,status,upvotes],(error,results)=>{
             if(error){
                 res.send(error.message);
 
                 throw error;
             }
             
-            res.status(201).send("request added successfully");
+            res.status(201).send(`product request added with ID: ${results.rows[0].id}`);
 
         });
 
@@ -62,19 +63,32 @@ const productRequest = async (req,res)=>{
 
 //creating feedback
 
-const createComment =async(req,res)=>{
-    const {id,content,user_id} =req.body;
-    await pool.query('INSERT INTO comments (id,content,user_id) VALUES ($1,$2,$3) RETURNING *',
-    [id,content,user_id],(error,result)=>{
+// const createComment =async(req,res)=>{
+//     const content = req.body;
+//     await pool.query('INSERT INTO comments (content) VALUES ($1,) RETURNING *',
+//     [content],(error,result)=>{
+//         if(error){
+//             res.send(error.message);
+//             throw error;
+//         }
+     
+//         res.status(201).send(`saved successful with ID:${result.rows[0].id}`);
+
+//     });
+// }
+
+
+const createComment = async (req,res)=>{
+    const content = req.body.content;
+    await pool.query('INSERT INTO comments (content) VALUES ($1) RETURNING *',[content],(error,results)=>{
         if(error){
             res.send(error.message);
             throw error;
         }
-        res.status(201).send("comment add successfuly");
+        res.status(201).send(`comment add successfully with ID: ${results.rows[0].id}`)
 
     });
 }
-
 //editting feedback
 
 const editFeedback =  (req,res)=>{
@@ -118,9 +132,49 @@ app.get("/roadmap",(req,res)=>{
 
 });
 
+
 app.get("/get-all-feedback",(req,res)=>{
 
 });
+
+const getFeedback = (req,res)=>{
+    const id = (req.params.id);
+    pool.query('SELECT * FROM product_features WHERE id = $1',[id],(error,result)=>{
+        if(error){
+            res.send(error.message)
+            throw error;
+        }
+        res.status(200).json(result.rows);
+
+    });
+
+}
+
+const getAllFeedback = (req,res)=>{
+    //const id = (req.params.id);
+    pool.query('SELECT * FROM product_features',(error,result)=>{
+        if(error){
+            res.send(error.message)
+            throw error;
+        }
+        res.status(200).json(result.rows);
+
+    });
+
+}
+
+const getSuggestion = (req,res)=>{
+    const status = "suggestion";
+    pool.query('SELECT * FROM product_features WHERE status = $1',[status],(error,results)=>{
+        if(error){
+            res.send(error.message);
+            throw error;
+        }
+        res.status(200).json(results.rows);
+
+    });
+
+}
 
 //Get a feedback
 
@@ -135,6 +189,10 @@ app.post("/create-comment",createComment);
 app.post("/products-request",productRequest);
 app.post("/add-user",addUser);
 app.put("/edit-feedback/:id",editFeedback);
+app.delete("/delete-feedback/:id",deleteFeedback);
+app.get("/get-feedback",getAllFeedback);
+app.get("/get-feedback/:id",getFeedback);
+app.get("/get-suggestion/:status",getFeedback);
 
 
 
