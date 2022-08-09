@@ -6,7 +6,6 @@ const pool = require("./db");
 app.use(cors());
 app.use(express.json());
 
-
 //Routes//
 
 //Create a feedback
@@ -19,9 +18,7 @@ app.use(express.json());
 
 //Delete a feedback
 
-
-
 //Start server
 app.listen(4001, () => {
-    console.log("Server is running on port 4001");
+  console.log("Server is running on port 4001");
 });
