@@ -118,73 +118,59 @@ app.get("/roadmap",(req,res)=>{
 
 });
 
-const getFeedback =async (req,res)=>{
+
+
+
+const getFeedback = (req,res)=>{
     const id = (req.params.id);
-
-   
-    var products = [];
-    var sqlResults =  await pool.query('SELECT * FROM product_features WHERE id = $1',[id]);
-    
-    try {
-        products = [...sqlResults.rows];
-        
-         let newProducts =await Promise.all(
-            products.map( async (val, ind,arr) => {
-                var __res = await getCommentPerProduct(val.id);
-                let currentObj = arr[ind];
-                return val = {...val,comments: [...__res]};
-            
-            
-            })
-         );
-
-         products = [...newProducts];
-
-         console.log("new products",newProducts)
-        
-        
-        
-    } catch (error) {
-        res.send(error.message)
+    pool.query('SELECT * FROM product_features WHERE id = $1',[id],(error,result)=>{
+        if(error){
+            res.send(error.message)
             throw error;
-    }
-    
-    return res.status(200).json(products);
+        }
+        res.status(200).json(result.rows);
+
+    });
+
 }
-
-
-
 
 const getAllFeedback =async (req,res)=>{
    
     var products = [];
-    var sqlResults =  await pool.query('SELECT * FROM product_features');
-    
-    try {
-        products = [...sqlResults.rows];
-        
-         let newProducts =await Promise.all(
-            products.map( async (val, ind,arr) => {
-                var __res = await getCommentPerProduct(val.id);
-                let currentObj = arr[ind];
-                return val = {...val,comments: [...__res]};
-            
-            
-            })
-         );
-
-         products = [...newProducts];
-
-         console.log("new products",newProducts)
-        
-        
-        
-    } catch (error) {
-        res.send(error.message)
+    pool.query('SELECT * FROM product_features',(error,results)=>{
+        if(error){
+            res.send(error.message);
             throw error;
-    }
+        }
+        products = results.rows;
+        // for (let i = 0; i < products.length; i++) {
+        products.forEach(product => {
+            console.log("Product : ", product)
+            pool.query('SELECT * FROM comments WHERE product_id = $1', [product.product_id],(error, comments_results)=>{
+                if(error){
+                    res.send(error.message);
+                    throw error;
+                }
+                product.comments = comments_results.rows;
+                
+            });
+        });
+        return res.status(200).json(products);
+    });
+    // try {
+    //     products = [...sqlResults.rows];
+        
+    //     products.forEach( async (val, ind) => {
+    //         var __res = await getCommentPerProduct(val.id);
+    //         products[ind].comments =__res;
+    //         console.log(Array.isArray(__res))
+    //     });
+    //     console.log("PRODUCTS>>>>>>>> ",products)
+    // } catch (error) {
+    //     res.send(error.message)
+    //         throw error;
+    // }
     
-    return res.status(200).json(products);
 }
 
 const getSuggestion = (req,res)=>{
@@ -206,13 +192,6 @@ async function getCommentPerProduct(product_id){
     let sqlResults = await pool.query('SELECT * FROM comments WHERE product_id = $1', [product_id]);
     try {
         comments = [...sqlResults.rows];
-        let newComments = await Promise.all(
-           comments.map(async (val,ind,arr)=>{
-            var useResults = await getUserPerComment(val.id);
-            return val = {...val,users:[...useResults]};
-           }) 
-        );
-        comments = [...newComments];
     } catch (error) {
         console.error(error);
     }    
@@ -220,21 +199,17 @@ async function getCommentPerProduct(product_id){
 }
 
 // GET USERS PER PRODUCT FEATURE COMMENT
-async function getUserPerComment(id){
+function getUserPerComment(id){
     let user = [];
-    let results = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
-        try{
-           user = [...results.rows];
-        }catch(error){
+    pool.query('SELECT * FROM users WHERE id = $1', [id], (error,result)=>{
+        if(error){
             res.send(error.message);
-            console.log(error);
             throw error;
-
         }
-        console.log('user>>>',user);
-        return user;
-       
-    
+        user = result.rows;
+        console.log("User :", user[0]);
+        return user[0];
+    });
 }
 
 //Get a feedback
