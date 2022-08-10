@@ -18,9 +18,9 @@ app.get("/",(req,res)=>{
 
 const addUser = async(req,res)=>{
     try{
-        const {name,username,image,password} = req.body;
-        await pool.query('INSERT INTO users (name,username,image,password) VALUES ($1,$2,$3,$4) RETURNING *',
-        [name,username,image,password],(error,result)=>{
+        const {name,username,image,password,email} = req.body;
+        await pool.query('INSERT INTO users (name,username,image,password,email) VALUES ($1,$2,$3,$4,$5) RETURNING *',
+        [name,username,image,password,email],(error,result)=>{
             if(error){
                 res.send(error.message);
                 throw error;
@@ -93,6 +93,8 @@ const editFeedback =  (req,res)=>{
 
 }
 
+//deleting feedback
+
 const deleteFeedback = (req,res)=>{
     const id = parseInt(req.params.id);
     pool.query('DELETE FROM product_features WHERE id = $1',[id],(error,results)=>{
@@ -109,14 +111,8 @@ const deleteFeedback = (req,res)=>{
 
 
 
-app.get("/roadmap",(req,res)=>{
-    //title
-    //category
-    //status
-    //number of comment
-    //number of reply
 
-});
+
 
 const getFeedback =async (req,res)=>{
     const id = (req.params.id);
@@ -236,6 +232,36 @@ async function getUserPerComment(id){
        
     
 }
+//roadmap
+    //title
+    //category
+    //status
+    //number of comment
+    //number of reply
+const getRoadmap = async (req,res)=>{
+    let roadmaps=[];
+   
+    await pool.query('SELECT title,category,status FROM product_features',(error,result)=>{
+        if(error){
+            res.send(error.message);
+        }
+        res.send(result.rows);
+        commentsSize();
+       
+     
+       
+    });
+}
+
+async function commentsSize(product_id){
+    let my_comment=await pool.query('SELECT * FROM comments WHERE product_id=$1',[product_id]);
+
+
+    return my_comment.rows.length;
+}
+
+
+
 
 //Get a feedback
 
@@ -254,6 +280,7 @@ app.delete("/delete-feedback/:id",deleteFeedback);
 app.get("/get-feedback",getAllFeedback);
 app.get("/get-feedback/:id",getFeedback);
 app.get("/get-suggestion/:status",getSuggestion);
+app.get("/roadmap",getRoadmap);
 
 
 
