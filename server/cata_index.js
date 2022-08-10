@@ -7,6 +7,7 @@ const { query } = require("express");
 app.use(cors());
 app.use(express.json());
 
+
 //Routes//
 app.get("/",(req,res)=>{
     res.send("Hello, from product feedback");
@@ -17,9 +18,9 @@ app.get("/",(req,res)=>{
 
 const addUser = async(req,res)=>{
     try{
-        const {name,username,image,password,email} = req.body;
-        await pool.query('INSERT INTO users (name,username,image,password,email) VALUES ($1,$2,$3,$4,$5) RETURNING *',
-        [name,username,image,password,email],(error,result)=>{
+        const {name,username,image,password} = req.body;
+        await pool.query('INSERT INTO users (name,username,image,password) VALUES ($1,$2,$3,$4) RETURNING *',
+        [name,username,image,password],(error,result)=>{
             if(error){
                 res.send(error.message);
                 throw error;
@@ -92,8 +93,6 @@ const editFeedback =  (req,res)=>{
 
 }
 
-//deleting feedback
-
 const deleteFeedback = (req,res)=>{
     const id = parseInt(req.params.id);
     pool.query('DELETE FROM product_features WHERE id = $1',[id],(error,results)=>{
@@ -110,76 +109,68 @@ const deleteFeedback = (req,res)=>{
 
 
 
+app.get("/roadmap",(req,res)=>{
+    //title
+    //category
+    //status
+    //number of comment
+    //number of reply
+
+});
 
 
 
-const getFeedback =async (req,res)=>{
+
+const getFeedback = (req,res)=>{
     const id = (req.params.id);
-
-   
-    var products = [];
-    var sqlResults =  await pool.query('SELECT * FROM product_features WHERE id = $1',[id]);
-    
-    try {
-        products = [...sqlResults.rows];
-        
-         let newProducts =await Promise.all(
-            products.map( async (val, ind,arr) => {
-                var __res = await getCommentPerProduct(val.id);
-                let currentObj = arr[ind];
-                return val = {...val,comments: [...__res]};
-            
-            
-            })
-         );
-
-         products = [...newProducts];
-
-         console.log("new products",newProducts)
-        
-        
-        
-    } catch (error) {
-        res.send(error.message)
+    pool.query('SELECT * FROM product_features WHERE id = $1',[id],(error,result)=>{
+        if(error){
+            res.send(error.message)
             throw error;
-    }
-    
-    return res.status(200).json(products);
+        }
+        res.status(200).json(result.rows);
+
+    });
+
 }
-
-
-
 
 const getAllFeedback =async (req,res)=>{
    
     var products = [];
-    var sqlResults =  await pool.query('SELECT * FROM product_features');
-    
-    try {
-        products = [...sqlResults.rows];
-        
-         let newProducts =await Promise.all(
-            products.map( async (val, ind,arr) => {
-                var __res = await getCommentPerProduct(val.id);
-                let currentObj = arr[ind];
-                return val = {...val,comments: [...__res]};
-            
-            
-            })
-         );
-
-         products = [...newProducts];
-
-         console.log("new products",newProducts)
-        
-        
-        
-    } catch (error) {
-        res.send(error.message)
+    pool.query('SELECT * FROM product_features',(error,results)=>{
+        if(error){
+            res.send(error.message);
             throw error;
-    }
+        }
+        products = results.rows;
+        // for (let i = 0; i < products.length; i++) {
+        products.forEach(product => {
+            console.log("Product : ", product)
+            pool.query('SELECT * FROM comments WHERE product_id = $1', [product.product_id],(error, comments_results)=>{
+                if(error){
+                    res.send(error.message);
+                    throw error;
+                }
+                product.comments = comments_results.rows;
+                
+            });
+        });
+        return res.status(200).json(products);
+    });
+    // try {
+    //     products = [...sqlResults.rows];
+        
+    //     products.forEach( async (val, ind) => {
+    //         var __res = await getCommentPerProduct(val.id);
+    //         products[ind].comments =__res;
+    //         console.log(Array.isArray(__res))
+    //     });
+    //     console.log("PRODUCTS>>>>>>>> ",products)
+    // } catch (error) {
+    //     res.send(error.message)
+    //         throw error;
+    // }
     
-    return res.status(200).json(products);
 }
 
 const getSuggestion = (req,res)=>{
@@ -201,13 +192,6 @@ async function getCommentPerProduct(product_id){
     let sqlResults = await pool.query('SELECT * FROM comments WHERE product_id = $1', [product_id]);
     try {
         comments = [...sqlResults.rows];
-        let newComments = await Promise.all(
-           comments.map(async (val,ind,arr)=>{
-            var useResults = await getUserPerComment(val.id);
-            return val = {...val,users:[...useResults]};
-           }) 
-        );
-        comments = [...newComments];
     } catch (error) {
         console.error(error);
     }    
@@ -215,52 +199,18 @@ async function getCommentPerProduct(product_id){
 }
 
 // GET USERS PER PRODUCT FEATURE COMMENT
-async function getUserPerComment(id){
+function getUserPerComment(id){
     let user = [];
-    let results = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
-        try{
-           user = [...results.rows];
-        }catch(error){
-            res.send(error.message);
-            console.log(error);
-            throw error;
-
-        }
-        console.log('user>>>',user);
-        return user;
-       
-    
-}
-//roadmap
-    //title
-    //category
-    //status
-    //number of comment
-    //number of reply
-const getRoadmap = async (req,res)=>{
-    let roadmaps=[];
-   
-    await pool.query('SELECT title,category,status FROM product_features',(error,result)=>{
+    pool.query('SELECT * FROM users WHERE id = $1', [id], (error,result)=>{
         if(error){
             res.send(error.message);
+            throw error;
         }
-        res.send(result.rows);
-        commentsSize();
-       
-     
-       
+        user = result.rows;
+        console.log("User :", user[0]);
+        return user[0];
     });
 }
-
-async function commentsSize(product_id){
-    let my_comment=await pool.query('SELECT * FROM comments WHERE product_id=$1',[product_id]);
-
-
-    return my_comment.rows.length;
-}
-
-
-
 
 //Get a feedback
 
@@ -269,7 +219,6 @@ async function commentsSize(product_id){
 //Edit Feedback
 
 //Delete a feedback
-
 
 //routes
 app.post("/create-comment",createComment);
@@ -280,12 +229,10 @@ app.delete("/delete-feedback/:id",deleteFeedback);
 app.get("/get-feedback",getAllFeedback);
 app.get("/get-feedback/:id",getFeedback);
 app.get("/get-suggestion/:status",getSuggestion);
-app.get("/roadmap",getRoadmap);
-
 
 
 
 //Start server
 app.listen(4001, () => {
-  console.log("Server is running on port 4001");
+    console.log("Server is running on port 4001");
 });
