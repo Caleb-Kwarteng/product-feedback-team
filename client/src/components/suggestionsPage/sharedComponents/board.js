@@ -2,9 +2,9 @@ import "../../../../src/App.css";
 const Board = () => {
   return (
     <>
-      <div className="board">
-        <h4>Frontend Mentor</h4>
-        <p>Feedback Board</p>
+      <div className="board p-4">
+        <h4 style={{ textAlign: "left" }}>Frontend Mentor</h4>
+        <p style={{ textAlign: "left" }}>Feedback Board</p>
       </div>
     </>
   );

@@ -11,7 +11,7 @@ import UXBtn from "./components/buttons/UXBtn";
 import EnhancementBtn from "./components/buttons/EnhancementBtn";
 import BugBtn from "./components/buttons/BugBtn";
 import FeatureBtn from "./components/buttons/FeatureBtn";
-import Board from "./components/suggestionsPage/sharedComponents/board";
+import Board from "./components/suggestionsPage/sharedComponents/Board";
 
 function App() {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -46,7 +46,7 @@ function App() {
       {/* <SignUpPage signUp={signUp} setSignUp={setSignUp} /> */}
       <Board />
       <nav>
-        <div className="navDiv">
+        <div className="navDiv p-2 ">
           <Link to="/All">
             <AllBtn />
           </Link>{" "}

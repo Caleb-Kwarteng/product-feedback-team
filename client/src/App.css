@@ -80,6 +80,7 @@
   left: 165px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .btnHover:hover{
@@ -99,4 +100,8 @@
   background-color: #E84D70;
   top: 94px;
   left: 165px;
+}
+
+.roadmapDiv{
+  
 }
