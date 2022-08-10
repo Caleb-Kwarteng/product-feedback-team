@@ -11,6 +11,7 @@ import UXBtn from "./components/buttons/UXBtn";
 import EnhancementBtn from "./components/buttons/EnhancementBtn";
 import BugBtn from "./components/buttons/BugBtn";
 import FeatureBtn from "./components/buttons/FeatureBtn";
+import Board from "./components/suggestionsPage/sharedComponents/board";
 
 function App() {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -43,31 +44,28 @@ function App() {
     <>
       {/* <FeedbackDetailPage feedbacks={feedbacks} addFeedback={addFeedback} /> */}
       {/* <SignUpPage signUp={signUp} setSignUp={setSignUp} /> */}
-      <h1>Frontend Mentor</h1>
-      <nav
-        style={{
-          borderBottom: "solid 1px",
-          paddingBottom: "1rem",
-        }}
-      >
-        <Link to="/All">
-          <AllBtn />
-        </Link>{" "}
-        <Link to="/UI">
-          <UIBtn />
-        </Link>{" "}
-        <Link to="/UX">
-          <UXBtn />
-        </Link>{" "}
-        <Link to="/Enhancement">
-          <EnhancementBtn />
-        </Link>{" "}
-        <Link to="/Bug">
-          <BugBtn />
-        </Link>{" "}
-        <Link to="/Feature">
-          <FeatureBtn />
-        </Link>
+      <Board />
+      <nav>
+        <div className="navDiv">
+          <Link to="/All">
+            <AllBtn />
+          </Link>{" "}
+          <Link to="/UI">
+            <UIBtn />
+          </Link>{" "}
+          <Link to="/UX">
+            <UXBtn />
+          </Link>{" "}
+          <Link to="/Enhancement">
+            <EnhancementBtn />
+          </Link>{" "}
+          <Link to="/Bug">
+            <BugBtn />
+          </Link>{" "}
+          <Link to="/Feature">
+            <FeatureBtn />
+          </Link>
+        </div>
       </nav>
       <Outlet />
     </>

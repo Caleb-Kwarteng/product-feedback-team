@@ -69,6 +69,34 @@
 .btnDiv{
   display: flex;
   justify-content: flex-end;
-  
+}
 
+/*Feedback category Nav*/
+.navDiv{
+  position: absolute;
+  width: 255px;
+  height: 166px;
+  top: 255px;
+  left: 165px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.btnHover:hover{
+  background-color: #4661E6;
+  color: white;
+}
+
+/*Styles for shared suggestion page components*/
+.board{
+  position: absolute;
+  height: 137px;
+  width: 255px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  color: white;
+  background-color: #E84D70;
+  top: 94px;
+  left: 165px;
 }
