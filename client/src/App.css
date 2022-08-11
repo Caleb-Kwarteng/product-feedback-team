@@ -89,6 +89,21 @@
 }
 
 /*Styles for shared suggestion page components*/
+.suggestionsEmpty{
+  position: relative;
+width: 1440px;
+height: 919px;
+
+background: #F7F8FD;
+}
+
+.leftSide{
+  position: absolute;
+width: 255px;
+height: 529px;
+left: 165px;
+top: 94px;
+}
 .board{
   position: absolute;
   height: 137px;
@@ -101,6 +116,8 @@
   top: 94px;
   left: 165px;
   border-radius: 10px;
+  background-image: url('../starter-code/assets/suggestions/desktop/background-header.png');
+  
 }
 
 .roadmapDiv{
@@ -126,3 +143,79 @@
   color: white;
   border-radius: 10px;
 }
+
+.emptyDiv{
+  position: absolute;
+  width: 825px;
+  height: 600px;
+  left: 450px;
+  top: 190px;
+  background: #ffffff;
+  border-radius: 10px;
+}
+.emptyDivContent{
+  position: absolute;
+  width: 410px;
+  height: 379px;
+  left: 659px;
+  top: 301px;
+}
+
+.imageDiv{
+  position: absolute;
+  width: 129.64px;
+  height: 136.74px;
+  left: 798.89px;
+  top: 301px;
+}
+.textDiv{
+  position: absolute;
+  width: 410px;
+  height: 189px;
+  left: 659px;
+  top: 491px;
+}
+.textDiv p{
+  position: absolute;
+  height: 46px;
+  left: 0%;
+  right: 0%;
+  top: calc(50% - 46px/2 - 20.5px);
+  font-family: 'Jost';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 23px;
+text-align: center;
+
+color: #647196;
+}
+
+#text1{
+  position: absolute;
+height: 35px;
+left: 15.85%;
+right: 16.83%;
+top: calc(50% - 35px/2 - 77px);
+
+font-family: 'Jost';
+font-style: normal;
+font-weight: 700;
+font-size: 24px;
+line-height: 35px;
+/* identical to box height */
+
+text-align: center;
+letter-spacing: -0.333333px;
+
+color: #3A4374;
+}
+
+#addbtn{
+  position: absolute;
+left: 30.37%;
+right: 31.1%;
+top: 76.72%;
+bottom: 0%;
+}
+
