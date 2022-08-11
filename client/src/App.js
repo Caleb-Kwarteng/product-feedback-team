@@ -12,6 +12,8 @@ import EnhancementBtn from "./components/buttons/EnhancementBtn";
 import BugBtn from "./components/buttons/BugBtn";
 import FeatureBtn from "./components/buttons/FeatureBtn";
 import Board from "./components/suggestionsPage/sharedComponents/Board";
+import Roadmap from "./components/suggestionsPage/sharedComponents/Roadmap";
+import Header from "./components/suggestionsPage/sharedComponents/Header";
 
 function App() {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -67,6 +69,8 @@ function App() {
           </Link>
         </div>
       </nav>
+      <Roadmap />
+      <Header />
       <Outlet />
     </>
   );
