@@ -3,7 +3,7 @@ CREATE TABLE "users" (
   "name" text NOT NULL,
   "username" text NOT NULL,
   "image" text,
-  "password" text NOT NULL
+  "password" varchar(255) NOT NULL
 );
 
 CREATE TABLE "comments" (
