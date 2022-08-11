@@ -12,17 +12,6 @@
 
 const Pool = require('pg').Pool;
 
-//configures the db we are connecting to
-// const pool = new Pool({
-//     user: "postgres",
-//     password: "root",
-//     database: "product-feedback",
-//     host: "localhost",
-//     port: 5432
-// });
-
-// module.exports = pool;
-
 const pool = new Pool({
     user: "postgres",
     password: "root",
