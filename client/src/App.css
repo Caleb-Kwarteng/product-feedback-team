@@ -36,3 +36,39 @@
     transform: rotate(360deg);
   }
 }
+
+
+/*Custom styles come here*/
+
+/*Generic page styles*/
+.genericPageStyles{
+  background-color: #F2F4FF;
+  height: 100vh;
+  
+}
+/*New Feedback Form styles*/
+.addNewFormContainer{
+  border-radius: 5px;
+ display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: white;
+  height: 100vh;
+  
+  
+}
+.addNewFormContainer input{
+  background-color: #F7F8FD;
+}
+
+.addNewFormContainer textarea{
+  background-color: #F7F8FD;
+}
+
+.btnDiv{
+  display: flex;
+  justify-content: flex-end;
+  
+
+}

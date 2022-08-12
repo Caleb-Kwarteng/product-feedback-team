@@ -7,7 +7,6 @@ const { query } = require("express");
 app.use(cors());
 app.use(express.json());
 
-
 //Routes//
 app.get("/",(req,res)=>{
     res.send("Hello, from product feedback");
@@ -315,6 +314,7 @@ async function getCommentPerProductTwo(product_id){
 
 //Delete a feedback
 
+
 //routes
 app.post("/create-comment",createComment);
 app.post("/products-request",productRequest);
@@ -329,7 +329,8 @@ app.get("/add-replies",addFeedback);
 
 
 
+
 //Start server
 app.listen(4001, () => {
-    console.log("Server is running on port 4001");
+  console.log("Server is running on port 4001");
 });
