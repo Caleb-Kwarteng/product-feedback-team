@@ -15,6 +15,7 @@ import Board from "./components/suggestionsPage/sharedComponents/Board";
 import Roadmap from "./components/suggestionsPage/sharedComponents/Roadmap";
 import Header from "./components/suggestionsPage/sharedComponents/Header";
 import EmptySuggestions from "./components/suggestionsPage/sharedComponents/EmptySuggestions";
+import SignUpForm from "./components/signUpForm/SignUpForm";
 
 function App() {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -47,7 +48,7 @@ function App() {
     <>
       {/* <FeedbackDetailPage feedbacks={feedbacks} addFeedback={addFeedback} /> */}
       {/* <SignUpPage signUp={signUp} setSignUp={setSignUp} /> */}
-      <div className="suggestionsEmpty">
+      {/* {<div className="suggestionsEmpty">
         <div>
           <Board />
           <nav>
@@ -77,7 +78,8 @@ function App() {
         <Header />
         <EmptySuggestions />
       </div>
-      <Outlet />
+      <Outlet />} */}
+      <SignUpForm />
     </>
   );
 }
