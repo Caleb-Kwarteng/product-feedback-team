@@ -171,7 +171,7 @@ const getAllFeedback =async (req,res)=>{
 
          products = [...newProducts];
 
-         console.log("new products",newProducts)
+         console.log("new yoyo products",newProducts)
         
         
         
@@ -202,13 +202,16 @@ async function getCommentPerProduct(product_id){
     let sqlResults = await pool.query('SELECT * FROM comments WHERE product_id = $1', [product_id]);
     try {
         comments = [...sqlResults.rows];
+      
         let newComments = await Promise.all(
            comments.map(async (val,ind,arr)=>{
             var useResults = await getUserPerComment(val.id);
             return val = {...val,users:[...useResults]};
            }) 
         );
+
         comments = [...newComments];
+
     } catch (error) {
         console.error(error);
     }    
@@ -232,6 +235,19 @@ async function getUserPerComment(id){
        
     
 }
+
+const addFeedback = async (req,res)=>{
+    const { content,replyingTo,userId} = req.body;
+    await pool.query('INSERT INTO replies (content,replying_to,user_id) VALUES ($1,$2,$3) RETURNING *',
+    [content,replyingTo,userId],(error,result)=>{
+        if(error){
+            res.send(error.message);
+            throw error;
+        }
+        res.status(201).send(`replies added with ID: ${id}`);
+    });
+
+}
 //roadmap
     //title
     //category
@@ -241,24 +257,52 @@ async function getUserPerComment(id){
 const getRoadmap = async (req,res)=>{
     let roadmaps=[];
    
-    await pool.query('SELECT title,category,status FROM product_features',(error,result)=>{
-        if(error){
-            res.send(error.message);
-        }
-        res.send(result.rows);
-        commentsSize();
-       
-     
-       
-    });
+    let roadmap = await pool.query('SELECT * FROM product_features');
+    try {
+        roadmaps = [...roadmap.rows];
+        
+         let newProducts =await Promise.all(
+            roadmaps.map( async (val, ind,arr) => {
+                var __res = await (await (await getCommentPerProductTwo(val.id)));
+                let currentObj = arr[ind];
+               
+                return val = {...val,comments: [...__res]};
+            
+            
+            })
+         );
+
+         roadmaps = [...newProducts];
+
+         console.log("new  products",roadmaps)
+        
+        
+        
+    } catch (error) {
+        res.send(error.message)
+            throw error;
+    }
+   
+    
+    return res.status(200).json(roadmaps);
 }
 
-async function commentsSize(product_id){
-    let my_comment=await pool.query('SELECT * FROM comments WHERE product_id=$1',[product_id]);
+async function getCommentPerProductTwo(product_id){
+    let comments = [];
+    let sqlResults = await pool.query('SELECT * FROM comments WHERE product_id = $1', [product_id]);
+    try {
+        comments = [...sqlResults.rows];
+   
 
+    } catch (error) {
+        console.error(error);
+    }  
 
-    return my_comment.rows.length;
+   
+    return comments;
 }
+
+
 
 
 
@@ -281,6 +325,7 @@ app.get("/get-feedback",getAllFeedback);
 app.get("/get-feedback/:id",getFeedback);
 app.get("/get-suggestion/:status",getSuggestion);
 app.get("/roadmap",getRoadmap);
+app.get("/add-replies",addFeedback);
 
 
 
