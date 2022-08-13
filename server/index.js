@@ -10,6 +10,9 @@ app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
 
+//Allow for persistent logins
+app.use(passport.session());
+
 //Routes//
 app.get("/", (req, res) => {
   res.send("Hello, from product feedback");
