@@ -320,3 +320,11 @@ bottom: 0%;
   font-weight: 600;
 }
 
+/*Login*/
+.loginForm{
+  
+  background-image: url('../starter-code/assets/suggestions/desktop/background-header.png');
+  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
