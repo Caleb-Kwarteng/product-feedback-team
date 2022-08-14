@@ -7,16 +7,27 @@ const FeedbackDetailPage = ({ feedbacks, addFeedback }) => {
   const [detail, setDetail] = useState("");
 
   //logic for adding a feedback when addfeedback button is clicked
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //Add feedback to array of feedbacks
+    try {
+      const body = { title, category, detail };
+      const response = await fetch("http://localhost:4001/products-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      console.log(response);
+    } catch (err) {
+      console.error(err.message);
+    }
+    /** //Add feedback to array of feedbacks
     addFeedback(title, category, detail);
 
     //Successfull submission clears form
     setTitle("");
     setCategory("");
-    setDetail("");
+    setDetail(""); */
   };
   return (
     <>

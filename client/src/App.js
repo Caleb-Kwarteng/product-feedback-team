@@ -16,6 +16,7 @@ import Roadmap from "./components/suggestionsPage/sharedComponents/Roadmap";
 import Header from "./components/suggestionsPage/sharedComponents/Header";
 import EmptySuggestions from "./components/suggestionsPage/sharedComponents/EmptySuggestions";
 import SignUpForm from "./components/signUpForm/SignUpForm";
+import LoginForm from "./components/loginForm/LoginForm";
 
 function App() {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -79,7 +80,9 @@ function App() {
         <EmptySuggestions />
       </div>
       <Outlet />} */}
-      <SignUpForm />
+      {/*  <SignUpForm /> */}
+      {/*  <LoginForm /> */}
+      <FeedbackDetailPage />
     </>
   );
 }

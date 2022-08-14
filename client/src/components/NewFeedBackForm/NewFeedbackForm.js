@@ -69,7 +69,13 @@ const NewFeedBackForm = ({
               </div>
 
               <div>
-                <AddFeedbackBtn />
+                {/* <AddFeedbackBtn />*/}
+                <input
+                  style={{ backgroundColor: "#AD1FEA", color: "white" }}
+                  className="btn"
+                  type="submit"
+                  value=" + Add Feedback"
+                />
               </div>
             </div>
           </form>
