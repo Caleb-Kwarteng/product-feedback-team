@@ -26,7 +26,7 @@ const NewFeedBackForm = ({
               </label>
               <input
                 type="text"
-                class="form-control"
+                class="form-control textInput"
                 value={title}
                 name="title"
                 onChange={(e) => setTitle(e.target.value)}
@@ -64,10 +64,8 @@ const NewFeedBackForm = ({
 
             <div class="mb-3 mt-3 btnDiv">
               <div>
-                {" "}
                 <CancelBtn />
-              </div>
-
+              </div>{" "}
               <div>
                 {/* <AddFeedbackBtn />*/}
                 <input
