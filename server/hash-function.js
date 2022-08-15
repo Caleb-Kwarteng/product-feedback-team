@@ -35,16 +35,20 @@ const passwordHash = async (password) => {
 
   // passwordHash('password')
 
-  const comparePasswords = async (password, hash) => {
+  // const comparePasswords = async (password, hash) => {
     
-    try {
-      const matchFound = await bcrypt.compare(password, hash);
-      return matchFound;
-    } catch (err) {
-      console.log(err);
-    }
-    return false;
-  };
+  //   try {
+  //     const matchFound = await bcrypt.compare(password, hash);
+  //     return matchFound;
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  //   return false;
+  // };
   
+  // const hash = passwordHash('password');
+
+  // console.log(comparePasswords('password', hash));
+
 
   module.exports = passwordHash;
