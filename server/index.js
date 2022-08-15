@@ -46,11 +46,7 @@ const addUser = async(req,res)=>{
             return res.status(400).send("All input is required");
         }
 
-        // if(oldUser[0]){
-        //     return res.status(400).send({ 'message': 'User with that EMAIL already exist' })
-
-
-        // }
+      
 
        
       
@@ -80,6 +76,14 @@ async function oldUser(email){
     else
         return false;
 }
+async function oldPassword(password){
+    const result = await pool.query( 'SELECT count(*) FROM users WHERE password = $1',[password]);
+    if(result > 0)
+        return true
+    else 
+        return false;
+    
+}
 
 
 
@@ -88,7 +92,7 @@ const productRequest = async (req,res)=>{
 
         const {title,category,description,status,upvotes}=req.body;
     
-        await pool.query('INSERT INTO product_features (title,category,description,status,upvotes) VALUES ($1,$2,$3,$4,$5) RETURNING *', 
+         pool.query('INSERT INTO product_features (title,category,description,status,upvotes) VALUES ($1,$2,$3,$4,$5) RETURNING *', 
         [title,category,description,status,upvotes],(error,results)=>{
             if(error){
                 res.send(error.message);
@@ -111,7 +115,7 @@ const productRequest = async (req,res)=>{
 
 const createComment = async (req,res)=>{
     const {content,user_id }= req.body.content;
-    await pool.query('INSERT INTO comments (content,user_id) VALUES ($1,$2) RETURNING *',[content,user_id],(error,results)=>{
+     pool.query('INSERT INTO comments (content,user_id) VALUES ($1,$2) RETURNING *',[content,user_id],(error,results)=>{
         if(error){
             res.send(error.message);
             throw error;
@@ -372,10 +376,9 @@ async function getCommentPerProductTwo(product_id){
     return comments;
 }
 
-const login =async (req,res)=>{
+const login = async (req,res)=>{
     const email = req.body.email;
     const password = req.body.password;
-    const result = 'SELECT count(*) FROM users WHERE email = $1';
 
 
     if(!(email && password)){
@@ -383,18 +386,26 @@ const login =async (req,res)=>{
 
     }
     try{
-        const  myRows  = await pool.query(result, [email]);
-        if(!myRows.rows[0]){
+       
+       
+            var isEmailExist = oldUser(email);
+             var isPassword = oldPassword(password);
+           
+
+        
+        if(!isEmailExist){
+            return res.status(400).send({'message': 'The email you provided is incorrect'});
+        }
+        
+       
+        if(!myRows.rows){
             return res.status(400).send({'message': 'The credentials you provided is incorrect'});
 
         }
-        // if(!helper.comparePassword(myRows.rows[0].password, req.body.password)) {
-        //     return res.status(400).send({ 'message': 'The credentials you provided is incorrect' });
-        //   }
-
-        if(myRows.rows[0] && (await bcrypt.compare(hashPassword,password))){
+        
+        if(myRows.rows[0] && ( bcrypt.compare(hashPassword,password))){
             const token = jwt.sign(
-                { user_id: user._id, email },
+                { user_id:  email,password },
                 process.env.TOKEN_KEY,
                 {
                   expiresIn: "2h",
@@ -412,9 +423,7 @@ const login =async (req,res)=>{
     }
 }
 
-// function comparePassword(hashPassword,password){
 
-// }
 
 
 
