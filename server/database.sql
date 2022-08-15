@@ -3,13 +3,15 @@ CREATE TABLE "users" (
   "name" text NOT NULL,
   "username" text NOT NULL,
   "image" text,
-  "password" text NOT NULL
+  "password" text NOT NULL,
+  "email" text NOT NULL
 );
 
 CREATE TABLE "comments" (
   "id" serial PRIMARY KEY,
   "content" text NOT NULL,
-  "user_id" int NOT NULL
+  "user_id" int NOT NULL,
+  "product_id" int NOT NULL
 );
 
 CREATE TABLE "product_features" (
@@ -19,10 +21,10 @@ CREATE TABLE "product_features" (
   "upvotes" integer,
   "status" text NOT NULL,
   "description" text NOT NULL,
-  "comments_id" int
 );
 
 CREATE TABLE "replies" (
+  "id" int NOT NULL,
   "content" text NOT NULL,
   "replying_to" text NOT NULL,
   "user_id" int NOT NULL
