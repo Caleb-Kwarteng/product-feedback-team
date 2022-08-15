@@ -2,6 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const pool = require("./db");
+const helper =require ("./Helper");
+var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
+require("dotenv").config();
+
+
+
+
+
 const { query } = require("express");
 //Set Up Middleware
 app.use(cors());
@@ -16,25 +25,62 @@ app.get("/",(req,res)=>{
 //Create a user
 
 const addUser = async(req,res)=>{
-    try{
+    
         const {name,username,image,password,email} = req.body;
-        await pool.query('INSERT INTO users (name,username,image,password,email) VALUES ($1,$2,$3,$4,$5) RETURNING *',
-        [name,username,image,password,email],(error,result)=>{
-            if(error){
-                res.send(error.message);
-                throw error;
+        const hashPassword = await bcrypt.hash(password, 10);
 
+
+        const token =  jwt.sign(
+            { user_id: email },
+            process.env.TOKEN_KEY,
+            {
+              expiresIn: "2h",
             }
-           
-            res.status(201).send(`new user added with ID: ${result.rows[0].id}`);
+          );
 
-        });
 
-    }catch(error){
-        res.send(error.message);
-    }
+
+
+
+        if(!(name && username && password && email)){
+            return res.status(400).send("All input is required");
+        }
+
+        // if(oldUser[0]){
+        //     return res.status(400).send({ 'message': 'User with that EMAIL already exist' })
+
+
+        // }
+
+       
+      
+    
+
+        let createUser = await pool.query('INSERT INTO users (name,username,image,password,email) VALUES ($1,$2,$3,$4,$5) RETURNING *',
+        [name,username,image,hashPassword,email]);
+
+        try{
+            var isEmailExist = oldUser(email);
+            if(isEmailExist)
+                return res.send("User already exist!").status(409);
+
+            createUser.rows;
+            return res.cookie({'token':token}).status(201).send(`User Added with ID: ${createUser.rows[0].id}`);
+        }catch(error){
+            res.send(error.message);
+            throw error;
+        }
 
 }
+
+async function oldUser(email){
+    const result = await pool.query('SELECT count(*) FROM users WHERE email = $1',[email]);
+    if(result > 0)
+        return true
+    else
+        return false;
+}
+
 
 
 const productRequest = async (req,res)=>{
@@ -247,6 +293,31 @@ const addFeedback = async (req,res)=>{
     });
 
 }
+
+const getReplies = (req,res)=>{
+    let replies = [];
+    let reply = pool.query('SELECT * FROM replies');
+    try{
+        replies = [...reply.rows];
+    }catch(error){
+        res.send(error.message);
+        throw error;
+    }
+    return res.status(200).json(replies);
+}
+
+async function getUserReplies(user_id){
+    let users=[];
+    let sqlUser = await pool.query('SELECT * FROM replies WHERE user_id = $1',[user_id]);
+    try{
+        users= [...sqlUser.rows];
+
+    }catch(error){
+        res.send(error.message);
+        throw error;
+    }
+    return users;
+}
 //roadmap
     //title
     //category
@@ -301,6 +372,51 @@ async function getCommentPerProductTwo(product_id){
     return comments;
 }
 
+const login =async (req,res)=>{
+    const email = req.body.email;
+    const password = req.body.password;
+    const result = 'SELECT count(*) FROM users WHERE email = $1';
+
+
+    if(!(email && password)){
+        res.status(400).send("All input is required");
+
+    }
+    try{
+        const  myRows  = await pool.query(result, [email]);
+        if(!myRows.rows[0]){
+            return res.status(400).send({'message': 'The credentials you provided is incorrect'});
+
+        }
+        // if(!helper.comparePassword(myRows.rows[0].password, req.body.password)) {
+        //     return res.status(400).send({ 'message': 'The credentials you provided is incorrect' });
+        //   }
+
+        if(myRows.rows[0] && (await bcrypt.compare(hashPassword,password))){
+            const token = jwt.sign(
+                { user_id: user._id, email },
+                process.env.TOKEN_KEY,
+                {
+                  expiresIn: "2h",
+                }
+              );
+
+              myRows.rows[0].token = token;
+              res.status(200).json(myRows.rows[0]);
+
+
+        }
+
+    }catch(error){
+        throw error;
+    }
+}
+
+// function comparePassword(hashPassword,password){
+
+// }
+
+
 
 
 
@@ -326,6 +442,7 @@ app.get("/get-feedback/:id",getFeedback);
 app.get("/get-suggestion/:status",getSuggestion);
 app.get("/roadmap",getRoadmap);
 app.get("/add-replies",addFeedback);
+app.post("/login",login);
 
 
 
