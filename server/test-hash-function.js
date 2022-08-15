@@ -1,17 +1,27 @@
-// const bcrypt = require("bcrypt");
-// const passwordHash = require('./hash-function.js');
-const passwordHash = require('./hash-function-new.js');
-// console.log(passwordHash('password'));
+const {hashPassword, comparePassword} = require('./hash-function');
+let textPassword = 'pass';
+let hash;
 
-// const callPasswordHash = require('./hash-function');
+hash = hashPassword(textPassword);
 
-// console.log(callPasswordHash('password'));
+hash.then(hash => {
+    //store hash in database
 
-// const hashTest = async (password) => {
-//     // console.log(await passwordHash(password));
-//     return await passwordHash(password);
-// }
+})
 
-console.log(passwordHash('password'));
+hash.then(hash => {
+    comparePassword('pass', hash).then(bool => {
+        if(bool) {
+            //Code for authorization
+            console.log('Welcome');
+        } else {
+            //Code to deny authorization
+            console.log('User Not Found');
+        }
+        // console.log(bool);
+    })
+
+})
+
 
 // console.log(hashTest('password'));

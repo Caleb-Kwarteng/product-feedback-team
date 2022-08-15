@@ -1,54 +1,21 @@
 const bcrypt = require("bcrypt");
 
-const saltRounds = 6;
-
-const passwordHash = async (password) => {
-    try {
-      const salt = await bcrypt.genSalt(saltRounds);
-      const hash = await bcrypt.hash(password, salt);
-
-      // console.log('gedaader' + hash);
-
-      return hash;
-
-      // console.log(await bcrypt.hash(password, salt));
-    } catch (err) {
+// let textPassword = 'pass';
+// let hash;
+async function hashPassword(plaintextPassword) {
+    try{
+        const hash = await bcrypt.hash(plaintextPassword, 10);
+        return hash;
+    } catch(err) {
         console.log(err);
-    //   return err;
     }
-    return null;
-  };
-  
-
-  // const pt = (password) => {
-  //   passwordHash(password)
-  //   .then(hash => {
-  //     console.log(hash);
-  //     return hash;
-  //   })
-  //   .catch (err => {
-  //     console.log(err);
-  //   });
-  // }
-
-  // console.log(pt('password'));
-
-  // passwordHash('password')
-
-  // const comparePasswords = async (password, hash) => {
     
-  //   try {
-  //     const matchFound = await bcrypt.compare(password, hash);
-  //     return matchFound;
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  //   return false;
-  // };
-  
-  // const hash = passwordHash('password');
+}
+ 
+// compare password
+async function comparePassword(plaintextPassword, hash) {
+    const result = await bcrypt.compare(plaintextPassword, hash);
+    return result;
+}
 
-  // console.log(comparePasswords('password', hash));
-
-
-  module.exports = passwordHash;
+module.exports = {hashPassword, comparePassword};
