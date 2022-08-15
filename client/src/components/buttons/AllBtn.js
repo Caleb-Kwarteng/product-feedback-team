@@ -7,7 +7,7 @@ const AllBtn = () => {
       <button
         type="button"
         className="btn"
-        style={{ backgroundColor: "#F2F4FF" }}
+        style={{ backgroundColor: "#F2F4FF", color: "#4661E6" }}
       >
         All
       </button>
