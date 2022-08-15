@@ -1,7 +1,5 @@
 const bcrypt = require("bcrypt");
 
-// let textPassword = 'pass';
-// let hash;
 async function hashPassword(plaintextPassword) {
     try{
         const hash = await bcrypt.hash(plaintextPassword, 10);
@@ -12,7 +10,6 @@ async function hashPassword(plaintextPassword) {
     
 }
  
-// compare password
 async function comparePassword(plaintextPassword, hash) {
     const result = await bcrypt.compare(plaintextPassword, hash);
     return result;

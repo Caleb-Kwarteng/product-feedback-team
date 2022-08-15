@@ -1,5 +1,5 @@
 const {hashPassword, comparePassword} = require('./hash-function');
-let textPassword = 'pass';
+let textPassword = 'passw';
 let hash;
 
 hash = hashPassword(textPassword);
@@ -18,10 +18,6 @@ hash.then(hash => {
             //Code to deny authorization
             console.log('User Not Found');
         }
-        // console.log(bool);
     })
 
-})
-
-
-// console.log(hashTest('password'));
+});
