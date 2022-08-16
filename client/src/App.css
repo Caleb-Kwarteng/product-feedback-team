@@ -365,8 +365,16 @@ top: 94px;
 .suggestionsRight{
   position: absolute;
 width: 825px;
-height: 72px;
+height: 151px;
 left: 450px;
-top: 94px;
+top: 190px;
+}
+
+.singleSuggestion{
+  position: absolute;
+width: 825px;
+height: 151px;
+left: 450px;
+top: 190px;
 
 }
