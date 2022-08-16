@@ -68,9 +68,7 @@ const SuggestionsPage = () => {
         <Header />
 
         <div>
-          {feedbacks.map((feedback) => (
-            <h1 key={feedback.id}>{feedback.title}</h1>
-          ))}
+          <Suggestion />
         </div>
       </div>
     </>

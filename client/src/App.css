@@ -37,6 +37,10 @@
   }
 }
 
+body{
+  background-color: #F7F8FD;
+
+}
 
 /*Custom styles come here*/
 
@@ -376,5 +380,15 @@ width: 825px;
 height: 151px;
 left: 450px;
 top: 190px;
+background-color: white;
+border-radius: 10px;
+}
 
+.upvoteBtn{
+  position: absolute;
+left: 0%;
+right: 94.74%;
+top: 0%;
+bottom: 44.21%;
+background-color: #F2F4FE;
 }
