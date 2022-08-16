@@ -22,11 +22,12 @@ const SuggestionsPage = () => {
       console.error(err.message);
     }
   };
+
   useEffect(() => {
     getProductFeatures();
   }, []);
 
-  console.log(feedbacks);
+  //console.log(feedbacks);
 
   return (
     <>
@@ -67,10 +68,9 @@ const SuggestionsPage = () => {
         <Header />
 
         <div>
-          {" "}
-          {feedbacks.map((feedback) => {
-            <Suggestion key={feedback.id} feedback={feedback} />;
-          })}
+          {feedbacks.map((feedback) => (
+            <h1 key={feedback.id}>{feedback.title}</h1>
+          ))}
         </div>
       </div>
     </>
