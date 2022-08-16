@@ -11,16 +11,16 @@ require("dotenv").config();
 
 
 
-const { query } = require("express");
-const passport = require("passport");
-const LocalSrategy = require("passport-local");
+// const { query } = require("express");
+// const passport = require("passport");
+// const LocalSrategy = require("passport-local");
 //Set Up Middleware
 app.use(cors());
 app.use(express.json());
-app.use(passport.initialize());
+// app.use(passport.initialize());
 
 //Allow for persistent logins
-app.use(passport.session());
+// app.use(passport.session());
 
 //Routes//
 app.get("/", (req, res) => {
@@ -52,11 +52,6 @@ const addUser = async(req,res)=>{
             return res.status(400).send("All input is required");
         }
 
-      
-
-       
-      
-    
 
         let createUser = await pool.query('INSERT INTO users (name,username,image,password,email) VALUES ($1,$2,$3,$4,$5) RETURNING *',
         [name,username,image,hashPassword,email]);
@@ -77,7 +72,8 @@ const addUser = async(req,res)=>{
 
 async function oldUser(email){
     const result = await pool.query('SELECT count(*) FROM users WHERE email = $1',[email]);
-    if(result > 0)
+    console.log("email >>>>>>>>", result.rows[0].count);
+    if(result.rows[0].count > 0)
         return true
     else
         return false;
@@ -321,37 +317,37 @@ async function getUserReplies(user_id){
     //status
     //number of comment
     //number of reply
-const getRoadmap = async (req,res)=>{
-    let roadmaps=[];
+// const getRoadmap = async (req,res)=>{
+//     let roadmaps=[];
    
-    let roadmap = await pool.query('SELECT * FROM product_features');
-    try {
-        roadmaps = [...roadmap.rows];
+//     let roadmap = await pool.query('SELECT * FROM product_features');
+//     try {
+//         roadmaps = [...roadmap.rows];
         
-         let newProducts =await Promise.all(
-            roadmaps.map( async (val, ind,arr) => {
-                var __res = await (await (await getCommentPerProductTwo(val.id)));
-                let currentObj = arr[ind];
+//          let newProducts =await Promise.all(
+//             roadmaps.map( async (val, ind,arr) => {
+//                 var __res = await (await (await getCommentPerProductTwo(val.id)));
+//                 let currentObj = arr[ind];
                
-                return val = {...val,comments: [...__res]};
+//                 return val = {...val,comments: [...__res]};
             
             
-            })
-         );
+//             })
+//          );
 
-         roadmaps = [...newProducts];
+//          roadmaps = [...newProducts];
 
-         console.log("new  products",roadmaps)
+//          console.log("new  products",roadmaps)
         
         
         
-    } catch (error) {
-        res.send(error.message)
-            throw error;
+//     } catch (error) {
+//         res.send(error.message)
+//             throw error;
 
-    }
-  );
-};
+//     }
+//   );
+// };
 //roadmap
 //title
 //category
@@ -408,27 +404,20 @@ const login = async (req,res)=>{
 
     if(!(email && password)){
         res.status(400).send("All input is required");
-
     }
     try{
-       
-       
-            var isEmailExist = oldUser(email);
-             var isPassword = oldPassword(password);
-           
-
         
+        var isEmailExist = oldUser(email);
         if(!isEmailExist){
+            console.log("email is null");
             return res.status(400).send({'message': 'The email you provided is incorrect'});
         }
-        
-       
-        if(!myRows.rows){
-            return res.status(400).send({'message': 'The credentials you provided is incorrect'});
 
-        }
+        let hashpassword = await pool.query('SELECT password FROM users WHERE email = $1 ORDER BY id desc LIMIT 1', [email]);
+        console.log('hashPassword', hashpassword.rows);
         
-        if(myRows.rows[0] && ( bcrypt.compare(hashPassword,password))){
+        if(hashpassword.rows[0] && ( bcrypt.compare(hashpassword.rows[0].password, password))){
+            console.log("hashing password");
             const token = jwt.sign(
                 { user_id:  email,password },
                 process.env.TOKEN_KEY,
@@ -437,10 +426,13 @@ const login = async (req,res)=>{
                 }
               );
 
-              myRows.rows[0].token = token;
-              res.status(200).json(myRows.rows[0]);
+              hashpassword.rows[0].token = token;
+              res.status(200).json(hashpassword.rows[0]);
+              console.log('json',token);
 
-
+        }else{
+            console.log("Password null");
+            return res.status(400).send({'message': 'The password you provided is incorrect'});
         }
 
     }catch(error){
