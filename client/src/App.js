@@ -48,9 +48,9 @@ function App() {
   };
   return (
     <>
-      <SuggestionsPage />
+      {/* <SuggestionsPage /> */}
       {/* <FeedbackDetailPage feedbacks={feedbacks} addFeedback={addFeedback} /> */}
-      {/* <SignUpPage signUp={signUp} setSignUp={setSignUp} /> */}
+      <SignUpPage signUp={signUp} setSignUp={setSignUp} />
       {/* {<div className="suggestionsEmpty">
         <div>
           <Board />

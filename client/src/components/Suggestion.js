@@ -5,23 +5,23 @@ const Suggestion = ({ feedback }) => {
   return (
     <>
       <div className="singleSuggestion pt-2 pb-2">
-        <div class="container text-center">
-          <div class="row">
-            <div class="col">
+        <div className="container text-center">
+          <div className="row">
+            <div className="col">
               <div className="btn btn-light">
                 <FaAngleUp type="button" />
-                <p>5</p>
+                <p>{feedback.upvotes}</p>
               </div>
             </div>
-            <div class="col-6">
-              <h3 style={{ textAlign: "left" }}>Title</h3>
-              <p style={{ textAlign: "left" }}>Detail</p>
+            <div className="col-6">
+              <h3 style={{ textAlign: "left" }}>{feedback.title}</h3>
+              <p style={{ textAlign: "left" }}>{feedback.description}</p>
               <div style={{ textAlign: "left" }}>
                 <EnhancementBtn />
               </div>
             </div>
-            <div class="col pt-4">
-              <BsFillChatFill /> 2
+            <div className="col pt-4">
+              <BsFillChatFill /> {feedback.comments.length}
             </div>
           </div>
         </div>
