@@ -15,7 +15,7 @@ const Roadmap = () => {
           }}
         >
           <ul>
-            <li>Planned</li>
+            <li className="listColor">Planned</li>
             <li>In-Progress</li>
             <li>Live</li>
           </ul>
