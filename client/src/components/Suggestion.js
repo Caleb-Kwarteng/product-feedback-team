@@ -3,13 +3,13 @@ const Suggestion = ({ feedback }) => {
     <>
       <div className="singleSuggestion">
         <div>
-          <h1>{feedback.title}</h1>
+          <h1>Suggestions Come Here</h1>
         </div>
         <div>
-          <h1>{feedback.title}</h1>
+          <h1></h1>
         </div>
         <div>
-          <h1>{feedback.title}</h1>
+          <h1></h1>
         </div>
       </div>
     </>
