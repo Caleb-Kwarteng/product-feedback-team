@@ -29,6 +29,7 @@ const SignUpForm = () => {
   };
 
   return (
+
     <>
       <div class="container-fluid" style={{ height: "100vh" }}>
         <div class="row">
@@ -109,6 +110,7 @@ const SignUpForm = () => {
         </div>
       </div>
     </>
+
   );
 };
 
