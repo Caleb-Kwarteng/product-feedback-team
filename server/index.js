@@ -2,10 +2,17 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const pool = require("./db");
-const helper = require("./Helper");
-var bcrypt = require("bcryptjs");
-var jwt = require("jsonwebtoken");
+
+const helper =require ("./Helper");
+var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
+const auth=require('./auth');
+
 require("dotenv").config();
+
+
+
+
 
 // const { query } = require("express");
 // const passport = require("passport");
@@ -30,18 +37,48 @@ const addUser = async (req, res) => {
   const { name, username, image, password, email } = req.body;
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const token = jwt.sign({ user_id: email }, process.env.TOKEN_KEY, {
-    expiresIn: "2h",
-  });
+
+const addUser = async(req,res)=>{
+    auth.verify(req,res,async()=>{
+        
+        const {name,username,image,password,email} = req.body;
+        const hashPassword = await bcrypt.hash(password, 10);
+
+
+        const token =  jwt.sign(
+            { user_id: email },
+            process.env.TOKEN_KEY,
+            {
+              expiresIn: "2h",
+            }
+          );
+
+
+        if(!(name && username && password && email)){
+            return res.status(400).send("All input is required");
+        }
+
+
+        let createUser = await pool.query('INSERT INTO users (name,username,image,password,email) VALUES ($1,$2,$3,$4,$5) RETURNING *',
+        [name,username,image,hashPassword,email]);
+
 
   if (!(name && username && password && email)) {
     return res.status(400).send("All input is required");
   }
 
-  let createUser = await pool.query(
-    "INSERT INTO users (name,username,image,password,email) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-    [name, username, image, hashPassword, email]
-  );
+
+            createUser.rows;
+            return res.cookie({'token':token}).status(201).send(`User Added with ID: ${createUser.rows[0].id}`);
+        }catch(error){
+            res.send(error.message);
+            throw error;
+        }
+    
+    });
+  
+
+
 
   try {
     var isEmailExist = oldUser(email);
@@ -87,8 +124,23 @@ const productRequest = async (req, res) => {
         if (error) {
           res.send(error.message);
 
-          throw error;
-        }
+
+const productRequest = async (req,res)=>{
+  auth.verify(req,res,async()=>{
+    try{
+
+        const {title,category,description,status,upvotes}=req.body;
+    
+         pool.query('INSERT INTO product_features (title,category,description,status,upvotes) VALUES ($1,$2,$3,$4,$5) RETURNING *', 
+        [title,category,description,status,upvotes],(error,results)=>{
+            if(error){
+                res.send(error.message);
+
+                throw error;
+            }
+            
+            res.status(201).send(`product request added with ID: ${results.rows[0].id}`);
+
 
         res
           .status(201)
@@ -114,13 +166,35 @@ const createComment = async (req, res) => {
         .status(201)
         .send(`comment add successfully with ID: ${results.rows[0].id}`);
     }
-  );
-};
+
+
+  });
+}
+
+
+
+
+const createComment = async (req,res)=>{
+    auth.verify(req,res,async()=>{
+        const {content,user_id }= req.body.content;
+        pool.query('INSERT INTO comments (content,user_id) VALUES ($1,$2) RETURNING *',[content,user_id],(error,results)=>{
+           if(error){
+               res.send(error.message);
+               throw error;
+           }
+           res.status(201).send(`comment add successfully with ID: ${results.rows[0].id}`)
+   
+       });
+    });
+  
+}
+
 
 //editting feedback
 
 const editFeedback = (req, res) => {
-  const id = parseInt(req.params.id);
+  auth.verify(req,res,async()=>{
+    const id = parseInt(req.params.id);
   const { title, category, status, description, upvotes } = req.body;
   pool.query(
     "UPDATE product_features SET title = $1, category = $2 , status = $3, description = $4 ,upvotes =$5 WHERE id = $6",
@@ -133,12 +207,14 @@ const editFeedback = (req, res) => {
       res.status(201).send(`Feedback modified with ID: ${result.rows[0].id}`);
     }
   );
+  });
 };
 
 //deleting feedback
 
 const deleteFeedback = (req, res) => {
-  const id = parseInt(req.params.id);
+  auth.verify(req,res,()=>{
+    const id = parseInt(req.params.id);
   pool.query(
     "DELETE FROM product_features WHERE id = $1",
     [id],
@@ -150,41 +226,45 @@ const deleteFeedback = (req, res) => {
       res.status(200).send(`Feedback deleted with ID: ${results.rows[0].id}`);
     }
   );
+  });
 };
 
 const getFeedback = async (req, res) => {
-  const id = req.params.id;
+ auth.verify(req,res,async()=>{
+    const id = req.params.id;
 
-  var products = [];
-  var sqlResults = await pool.query(
-    "SELECT * FROM product_features WHERE id = $1",
-    [id]
-  );
-
-  try {
-    products = [...sqlResults.rows];
-
-    let newProducts = await Promise.all(
-      products.map(async (val, ind, arr) => {
-        var __res = await getCommentPerProduct(val.id);
-        let currentObj = arr[ind];
-        return (val = { ...val, comments: [...__res] });
-      })
+    var products = [];
+    var sqlResults = await pool.query(
+      "SELECT * FROM product_features WHERE id = $1",
+      [id]
     );
-
-    products = [...newProducts];
-
-    console.log("new products", newProducts);
-  } catch (error) {
-    res.send(error.message);
-    throw error;
-  }
+  
+    try {
+      products = [...sqlResults.rows];
+  
+      let newProducts = await Promise.all(
+        products.map(async (val, ind, arr) => {
+          var __res = await getCommentPerProduct(val.id);
+          let currentObj = arr[ind];
+          return (val = { ...val, comments: [...__res] });
+        })
+      );
+  
+      products = [...newProducts];
+  
+      console.log("new products", newProducts);
+    } catch (error) {
+      res.send(error.message);
+      throw error;
+    }
+ });
 
   return res.status(200).json(products);
 };
 
 const getAllFeedback = async (req, res) => {
-  var products = [];
+  auth.verify(req,res,async()=>{
+    var products = [];
   var sqlResults = await pool.query("SELECT * FROM product_features");
 
   try {
@@ -207,10 +287,12 @@ const getAllFeedback = async (req, res) => {
   }
 
   return res.status(200).json(products);
+  });
 };
 
 const getSuggestion = (req, res) => {
-  const status = "suggestion";
+  auth.verify(req,res,()=>{
+    const status = "suggestion";
   pool.query(
     "SELECT * FROM product_features WHERE status = $1",
     [status],
@@ -222,6 +304,7 @@ const getSuggestion = (req, res) => {
       res.status(200).json(results.rows);
     }
   );
+  });
 };
 
 // GET COMMENTS PER PRODUCT FEATURE
@@ -263,20 +346,41 @@ async function getUserPerComment(id) {
   return user;
 }
 
-const addFeedback = async (req, res) => {
-  const { content, replyingTo, userId } = req.body;
-  await pool.query(
-    "INSERT INTO replies (content,replying_to,user_id) VALUES ($1,$2,$3) RETURNING *",
-    [content, replyingTo, userId],
-    (error, result) => {
-      if (error) {
+
+
+const addFeedback = async (req,res)=>{
+auth.verify(req,res,async()=>{
+    const { content,replyingTo,userId} = req.body;
+    await pool.query('INSERT INTO replies (content,replying_to,user_id) VALUES ($1,$2,$3) RETURNING *',
+    [content,replyingTo,userId],(error,result)=>{
+        if(error){
+            res.send(error.message);
+            throw error;
+        }
+        res.status(201).send(`replies added with ID: ${result.rows[0].id}`);
+    });
+});
+
+}
+
+const getReplies = (req,res)=>{
+   auth.verify(req,res,()=>{
+    let replies = [];
+    let reply = pool.query('SELECT * FROM replies');
+    try{
+        replies = [...reply.rows];
+    }catch(error){
+
         res.send(error.message);
         throw error;
       }
       res.status(201).send(`replies added with ID: ${result.rows[0].id}`);
     }
-  );
-};
+
+    return res.status(200).json(replies);
+   });
+}
+
 
 const getReplies = (req, res) => {
   let replies = [];
@@ -344,30 +448,34 @@ async function getUserReplies(user_id) {
 //number of comment
 //number of reply
 const getRoadmap = async (req, res) => {
-  let roadmaps = [];
 
-  let roadmap = await pool.query("SELECT * FROM product_features");
-  try {
-    roadmaps = [...roadmap.rows];
+    auth.verify(req,res,async()=>{
+        let roadmaps = [];
 
-    let newProducts = await Promise.all(
-      roadmaps.map(async (val, ind, arr) => {
-        var __res = await await await getCommentPerProductTwo(val.id);
-        let currentObj = arr[ind];
+        let roadmap = await pool.query("SELECT * FROM product_features");
+        try {
+          roadmaps = [...roadmap.rows];
+      
+          let newProducts = await Promise.all(
+            roadmaps.map(async (val, ind, arr) => {
+              var __res = await await await getCommentPerProductTwo(val.id);
+              let currentObj = arr[ind];
+      
+              return (val = { ...val, comments: [...__res] });
+            })
+          );
+      
+          roadmaps = [...newProducts];
+      
+          console.log("new  products", roadmaps);
+        } catch (error) {
+          res.send(error.message);
+          throw error;
+        }
+      
+        return res.status(200).json(roadmaps);
+    });
 
-        return (val = { ...val, comments: [...__res] });
-      })
-    );
-
-    roadmaps = [...newProducts];
-
-    console.log("new  products", roadmaps);
-  } catch (error) {
-    res.send(error.message);
-    throw error;
-  }
-
-  return res.status(200).json(roadmaps);
 };
 
 async function getCommentPerProductTwo(product_id) {
@@ -389,16 +497,16 @@ const login = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  if (!(email && password)) {
-    res.status(400).send("All input is required");
-  }
-  try {
-    var isEmailExist = oldUser(email);
-    if (!isEmailExist) {
-      console.log("email is null");
-      return res
-        .status(400)
-        .send({ message: "The email you provided is incorrect" });
+
+const login = async (req,res)=>{
+   auth.verify(req,res,async()=>{
+    const email = req.body.email;
+    const password = req.body.password;
+
+
+    if(!(email && password)){
+        res.status(400).send("All input is required");
+
     }
 
     let hashpassword = await pool.query(
@@ -429,10 +537,19 @@ const login = async (req, res) => {
         .status(400)
         .send({ message: "The password you provided is incorrect" });
     }
-  } catch (error) {
-    throw error;
-  }
-};
+
+   });
+}
+
+
+
+
+
+
+
+
+
+
 
 //Get a feedback
 
