@@ -14,6 +14,12 @@ import SuggestionsPage from "./components/suggestionsPage/SuggestionsPage";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+/**
+   * Buttons
+   * <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
         <Route path="All" element={<SuggestionsPage />} />
@@ -25,8 +31,7 @@ root.render(
       </Route>
     </Routes>
   </BrowserRouter>
-);
-
+   */
 /**  <React.StrictMode>
     <App />
   </React.StrictMode> */

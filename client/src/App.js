@@ -17,6 +17,7 @@ import Header from "./components/suggestionsPage/sharedComponents/Header";
 import EmptySuggestions from "./components/suggestionsPage/sharedComponents/EmptySuggestions";
 import SignUpForm from "./components/signUpForm/SignUpForm";
 import LoginForm from "./components/loginForm/LoginForm";
+import SuggestionsPage from "./components/suggestionsPage/SuggestionsPage";
 
 function App() {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -47,8 +48,9 @@ function App() {
   };
   return (
     <>
+      {/* <SuggestionsPage /> */}
       {/* <FeedbackDetailPage feedbacks={feedbacks} addFeedback={addFeedback} /> */}
-      {/* <SignUpPage signUp={signUp} setSignUp={setSignUp} /> */}
+      <SignUpPage signUp={signUp} setSignUp={setSignUp} />
       {/* {<div className="suggestionsEmpty">
         <div>
           <Board />
@@ -82,7 +84,7 @@ function App() {
       <Outlet />} */}
       {/*  <SignUpForm /> */}
       {/*  <LoginForm /> */}
-      <FeedbackDetailPage />
+      {/* <FeedbackDetailPage /> */}
     </>
   );
 }
