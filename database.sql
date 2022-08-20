@@ -20,7 +20,7 @@ CREATE TABLE "product_features" (
   "category" text NOT NULL,
   "upvotes" integer,
   "status" text NOT NULL,
-  "description" text NOT NULL,
+  "description" text NOT NULL
 );
 
 CREATE TABLE "replies" (
