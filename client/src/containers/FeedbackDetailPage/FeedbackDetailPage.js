@@ -9,10 +9,13 @@ const FeedbackDetailPage = ({ feedbacks, addFeedback }) => {
   //logic for adding a feedback when addfeedback button is clicked
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    addFeedback(title, category, detail);
+    setTitle("");
+    setCategory("");
+    setDetail("");
     try {
       const body = { title, category, detail };
-      const response = await fetch("http://localhost:4001/products-request", {
+      const response = await fetch("/products-request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

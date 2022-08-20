@@ -6,8 +6,12 @@ const helper = require("./Helper");
 var bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 const auth = require("./auth");
+const path = require("path");
+const PORT = process.env.PORT || 4001;
 
 require("dotenv").config();
+
+//process.env.PORT
 
 // const { query } = require("express");
 // const passport = require("passport");
@@ -21,10 +25,20 @@ app.use(express.json());
 // app.use(passport.session());
 // our index oh
 
+//app.use(express.static(path.join(__dirname, "client/build")));
+
+if (process.env.NODE_ENV === "production") {
+  //Serve static content
+  app.use(express.static(path.join(__dirname, "client/build")));
+}
+
+console.log(__dirname);
+console.log(path.join(__dirname, "client/build"));
 //Routes//
-app.get("/", (req, res) => {
+
+/**app.get("/", (req, res) => {
   res.send("Hello, from product feedback");
-});
+}); */
 
 //Create a user
 
@@ -482,7 +496,11 @@ app.get("/roadmap", getRoadmap);
 app.get("/add-replies", addFeedback);
 app.post("/login", login);
 
+/**app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build/index.html"));
+}); */
+
 //Start server
-app.listen(4001, () => {
-  console.log("Server is running on port 4001");
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

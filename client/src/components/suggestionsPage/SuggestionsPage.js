@@ -15,7 +15,7 @@ const SuggestionsPage = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const getProductFeatures = async () => {
     try {
-      const response = await fetch("http://localhost:4001/get-feedback");
+      const response = await fetch("/get-feedback");
       const jsonData = await response.json();
       setFeedbacks(jsonData);
     } catch (err) {

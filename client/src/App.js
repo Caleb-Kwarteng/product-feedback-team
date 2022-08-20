@@ -20,7 +20,6 @@ import LoginForm from "./components/loginForm/LoginForm";
 
 import SuggestionsPage from "./components/suggestionsPage/SuggestionsPage";
 
-
 function App() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [signUp, setSignUp] = useState([]);
@@ -90,7 +89,6 @@ function App() {
       {/*  <LoginForm /> */}
 
       {/* <FeedbackDetailPage /> */}
-
     </>
   );
 }

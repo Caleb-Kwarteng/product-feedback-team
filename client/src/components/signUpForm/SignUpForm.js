@@ -12,7 +12,7 @@ const SignUpForm = () => {
     e.preventDefault();
     try {
       const body = { name, username, email, password };
-      const response = await fetch("http://localhost:4001/add-user", {
+      const response = await fetch("/add-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -29,7 +29,6 @@ const SignUpForm = () => {
   };
 
   return (
-
     <>
       <div class="container-fluid" style={{ height: "100vh" }}>
         <div class="row">
@@ -110,7 +109,6 @@ const SignUpForm = () => {
         </div>
       </div>
     </>
-
   );
 };
 
