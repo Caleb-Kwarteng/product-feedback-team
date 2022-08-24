@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const pool = require("./db");
-const helper =require ("./Helper");
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 const auth=require('./auth');
@@ -76,7 +75,7 @@ const addUser = async(req,res)=>{
 
 async function oldUser(email){
     const result = await pool.query('SELECT count(*) FROM users WHERE email = $1',[email]);
-    console.log("email >>>>>>>>", result.rows[0].count);
+    console.log("email >>>", result.rows[0].count);
     if(result.rows[0].count > 0)
         return true
     else
@@ -388,7 +387,7 @@ const getRoadmap = async (req, res) => {
       
           let newProducts = await Promise.all(
             roadmaps.map(async (val, ind, arr) => {
-              var __res = await await await getCommentPerProductTwo(val.id);
+              var __res = await getCommentPerProductTwo(val.id);
               let currentObj = arr[ind];
       
               return (val = { ...val, comments: [...__res] });
@@ -423,7 +422,7 @@ async function getCommentPerProductTwo(product_id) {
   return comments;
 }
 
-
+//LOGIN 
 const login = async (req,res)=>{
    auth.verify(req,res,async()=>{
     const email = req.body.email;
@@ -499,6 +498,7 @@ app.get("/get-suggestion/:status",getSuggestion);
 app.get("/roadmap",getRoadmap);
 app.get("/add-replies",addFeedback);
 app.post("/login",login);
+app.get("/get-replies",getReplies);
 
 
 
