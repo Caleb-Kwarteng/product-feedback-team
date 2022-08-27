@@ -4,19 +4,37 @@ import { useState } from "react";
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const body = { username, password };
+      const response = await fetch("http://localhost:4001/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        /** headers: {
+          authorization: API_KEY,
+          Accept: "application/json",
+        } */
+        body: JSON.stringify(body),
+      });
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
   return (
     <>
       <div class="container-fluid" style={{ height: "100vh" }}>
         <div class="row">
           <div class="col pt-5">
             <h2 className="p-5 pt-5 text-center">LOGIN HERE</h2>{" "}
-            <form>
+            <form onSubmit={handleSubmit}>
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">
                   Username
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   class="form-control"
                   id="exampleFormControlInput1"
                   placeholder="Enter your username"
@@ -30,7 +48,7 @@ const LoginForm = () => {
                   Password
                 </label>
                 <input
-                  type="email"
+                  type="password"
                   class="form-control"
                   id="exampleFormControlInput1"
                   placeholder="Enter your password"

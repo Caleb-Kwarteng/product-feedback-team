@@ -155,8 +155,10 @@ top: 94px;
   height: 178px;
   left: 165px;
   top: 445px;
+
   background: #FFFFFF;
 border-radius: 10px;
+
 }
 
 .header{
@@ -354,6 +356,7 @@ bottom: 0%;
   height: 100vh;
   background-size: cover;
   background-repeat: no-repeat;
+
 }
 
 /*Suggestions Page FIlled*/
@@ -391,4 +394,5 @@ right: 94.74%;
 top: 0%;
 bottom: 44.21%;
 background-color: #F2F4FE;
+
 }

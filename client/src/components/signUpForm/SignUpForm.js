@@ -12,13 +12,15 @@ const SignUpForm = () => {
     e.preventDefault();
     try {
       const body = { name, username, email, password };
-      const response = await fetch("http://localhost:4001/add-user", {
+      const response = await fetch("http://localhost:4001/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
+      const parseRes = await response.json();
 
-      console.log(response);
+      localStorage.setItem("token", parseRes.token);
+      //setAuth(true);
     } catch (err) {
       console.log(err.message);
     }
