@@ -32,8 +32,8 @@ const SuggestionsPage = () => {
   return (
     <>
       <div className="container pt-5">
-        <div class="row">
-          <div class="col-sm-4 suggestionsLeft">
+        <div className="row">
+          <div className="col-sm-4 suggestionsLeft">
             <div className="">
               <div style={{ width: "255px", height: "137px" }}>
                 <Board />
@@ -76,7 +76,7 @@ const SuggestionsPage = () => {
               </div>
             </div>
           </div>
-          <div class="col-sm-8">
+          <div className="col-sm-8">
             <div>
               <Header feedbacks={feedbacks} />
             </div>

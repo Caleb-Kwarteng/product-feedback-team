@@ -1,28 +1,18 @@
 //import logo from './logo.svg';
 import "./App.css";
-import { Fragment, useState } from "react";
-import { Link, Navigate, Outlet, Router } from "react-router-dom";
-import AddFeedbackBtn from "./components/buttons/AddFeedbackBtn";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import FeedbackDetailPage from "./containers/FeedbackDetailPage/FeedbackDetailPage";
 import SignUpPage from "./containers/SignUpPage/SIgnUpPage";
-import AllBtn from "./components/buttons/AllBtn";
-import UIBtn from "./components/buttons/UIBtn";
-import UXBtn from "./components/buttons/UXBtn";
-import EnhancementBtn from "./components/buttons/EnhancementBtn";
-import BugBtn from "./components/buttons/BugBtn";
-import FeatureBtn from "./components/buttons/FeatureBtn";
-import Board from "./components/suggestionsPage/sharedComponents/Board";
-import Roadmap from "./components/suggestionsPage/sharedComponents/Roadmap";
-import Header from "./components/suggestionsPage/sharedComponents/Header";
-import EmptySuggestions from "./components/suggestionsPage/sharedComponents/EmptySuggestions";
-import SignUpForm from "./components/signUpForm/SignUpForm";
-import LoginForm from "./components/loginForm/LoginForm";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-
+import { Route, Routes } from "react-router-dom";
 import SuggestionsPage from "./components/suggestionsPage/SuggestionsPage";
 import LoginPage from "./containers/login/LoginPage";
+import FeedBackDetail from "./components/f_detail/FeedBackDetail";
+import EditFeedback from "./components/added features/edit-feedback-page/EditFeedback";
+import RoadmapMain from "./components/added features/roadmap/RoadmapMain";
 
 function App() {
+  //usestate to check if the user is authenticated
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const setAuth = (boolean) => {
@@ -32,7 +22,6 @@ function App() {
     <>
       <Routes>
         <Route
-          exact
           path="/login"
           element={
             !isAuthenticated ? (
@@ -43,7 +32,6 @@ function App() {
           }
         />
         <Route
-          exact
           path="/signup"
           element={
             !isAuthenticated ? (
@@ -55,8 +43,7 @@ function App() {
         />
 
         <Route
-          exact
-          path="/dashboard"
+          path="/dashboard/*"
           element={
             isAuthenticated ? (
               <SuggestionsPage setAuth={setAuth} />
@@ -67,6 +54,9 @@ function App() {
         />
 
         <Route exact path="/feedback" element={<FeedbackDetailPage />} />
+        <Route exact path="/feedbackDetail" element={<FeedBackDetail />} />
+        <Route exact path="/editFeedback" element={<EditFeedback />} />
+        <Route exact path="/roadmap" element={<RoadmapMain />} />
       </Routes>
     </>
   );

@@ -1,0 +1,89 @@
+* {
+    box-sizing: border-box;
+}
+.container{
+    width: 540px;
+    height: 822px;
+    margin: 180px 450px 129px 450px;
+    color: black;
+   
+    
+}
+.circle {
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 152px;
+    left: 492px;
+    
+}
+
+.back{
+    margin: 92px 914px 40px 450.33px;
+    width: 93px;
+    border: none;
+    text-decoration: underline;
+}
+h3{
+    margin: 52px 42px 72px 42px;
+}
+.form{
+    width: 456px;
+    height: 620px;
+    margin: 162px 42px 40px 42px;
+}
+input, label {
+    display: block;
+}
+.form-inputs h5{
+    margin-bottom: 2px;
+}
+.form-label{
+    margin-bottom: 16px;
+}
+.form-input{
+    width: 456px;
+    height: 48px;
+}
+select{
+    width: 456px;
+    height: 48px; 
+}
+
+.buttons{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.save-cancel-btn{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-btn{
+    margin-top: 20px;
+    background-color: #f49f85;
+    width: 93px;
+    height: 44px;
+    border-radius: 14px;
+}
+.cancel-btn{
+    margin-top: 20px;
+    background-color: #3a4374;
+    width: 93px;
+    height: 44px;
+    border-radius: 14px; 
+}
+.feedback-btn{
+    margin-top: 20px;
+    background-color: #ad1fea;
+    width: auto;
+    height: 44px;
+    border-radius: 14px;
+    margin-left: 15px; 
+}

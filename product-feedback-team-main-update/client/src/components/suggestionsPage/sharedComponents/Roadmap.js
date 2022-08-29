@@ -1,4 +1,12 @@
+import { Route, Routes, useNavigate } from "react-router-dom";
+import RoadmapMain from "../../added features/roadmap/RoadmapMain";
 const Roadmap = () => {
+  const roadmapNav = useNavigate();
+
+  const navigateToRoadmap = () => {
+    //navigate to roadmap
+    roadmapNav("/roadmap");
+  };
   return (
     <>
       <div className="roadmapDiv p-3">
@@ -6,7 +14,17 @@ const Roadmap = () => {
           <p>
             <b>Roadmap</b>
           </p>
-          <p>View</p>
+          <p
+            type="button"
+            style={{ cursor: "pointer" }}
+            onClick={navigateToRoadmap}
+          >
+            View
+          </p>
+
+          <Routes>
+            <Route path="/roadmap" element={<RoadmapMain />} />
+          </Routes>
         </div>
         <div
           style={{
@@ -15,9 +33,6 @@ const Roadmap = () => {
           }}
         >
           <ul>
-
-            <li>Planned</li>
-
             <li className="listColor">Planned</li>
 
             <li>In-Progress</li>

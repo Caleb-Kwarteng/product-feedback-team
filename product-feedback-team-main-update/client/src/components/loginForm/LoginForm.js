@@ -26,7 +26,7 @@ const LoginForm = ({ setAuth }) => {
     <>
       <div className="container-fluid" style={{ height: "100vh" }}>
         <div className="row">
-          <div className="col pt-5">
+          <div className="col pt-5 mx-5">
             <h1 className="p-5 pt-5 my-5 text-center">LOGIN HERE</h1>{" "}
             <form onSubmit={handleSubmit}>
               <div className="mb-3">

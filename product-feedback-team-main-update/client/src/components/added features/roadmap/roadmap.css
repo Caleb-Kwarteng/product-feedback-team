@@ -1,0 +1,95 @@
+* {
+    box-sizing: border-box;
+}
+
+.roadmap-container {
+    margin: 78px 165px 0 125px;
+}
+
+.roadmap-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    align-items: center;
+    background-color: rgb(55, 63, 104);
+    height: 113px;
+    width: 1110px;
+    color: white;
+}
+
+.roadmap-grid {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 350px 350px 350px;
+    gap: 30px;
+    
+}
+
+.roadmap-comments {
+    padding: 20px;
+    width: 350px;
+    background-color: white;
+    border-radius: 5px;
+    margin-bottom: 24px;
+    margin-top: 0px;
+}
+
+.roadmap-comments p {
+    margin:3px;
+}
+.roadmap-comments button {
+    background-color: lightgray;
+    border-radius: 8px;
+    color: rgba(27, 13, 233, 0.973);
+    height: 30px;
+    width: auto;
+    border: none;
+    margin: 5px 0px 5px 0px;
+}
+.planned-bar {
+    margin-top: 0px;
+    height: 6px;
+    background-color: rgb(244, 159, 133);
+    border-radius: 3px;
+}
+.progress-bar {
+    margin-top: 0px;
+    height: 6px;
+    background-color: rgb(173, 31, 234);
+    border-radius: 3px;
+}
+.live-bar {
+    margin-top: 0px;
+    height: 6px;
+    background-color: rgb(98, 188, 250);
+    border-radius: 3px;
+}
+.upvotes {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+.votes {
+    background-color: lightgray;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+}
+.message {
+    display: flex;
+    width: 40px;
+    justify-content: center;
+    align-items: center;
+}
+.nav-feedback-btn {
+    background-color: rgb(173, 31, 234) ;
+    color: white;
+    border-radius: 8px;
+    width: 158px;
+    height: 44px;
+    border: none;
+}

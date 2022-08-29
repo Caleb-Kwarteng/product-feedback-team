@@ -1,8 +1,15 @@
 import EnhancementBtn from "./buttons/EnhancementBtn";
 import { BsFillChatFill } from "react-icons/bs";
 import { FaAngleUp } from "react-icons/fa";
-
+import { useNavigate, Routes, Route } from "react-router-dom";
+import FeedBackDetail from "./f_detail/FeedBackDetail";
 const Suggestion = ({ feedback }) => {
+  //Route to individual feedback detail
+  const feedbackDetailNav = useNavigate();
+
+  const navigateToFeedback = () => {
+    feedbackDetailNav("/feedbackDetail");
+  };
   return (
     <>
       {/* Version 1
@@ -33,7 +40,12 @@ const Suggestion = ({ feedback }) => {
         className=" text-center"
         style={{ margin: "20px", borderRadius: "10px" }}
       >
-        <div className="row pt-2 pb-2" style={{ backgroundColor: "white" }}>
+        <div
+          className="row pt-2 pb-2"
+          style={{ backgroundColor: "white", borderRadius: "10px" }}
+          type="button"
+          onClick={navigateToFeedback}
+        >
           <div className="col">
             <div className="btn btn-light">
               <FaAngleUp type="button" />
@@ -51,6 +63,9 @@ const Suggestion = ({ feedback }) => {
             <BsFillChatFill /> {feedback.comments.length}
           </div>
         </div>
+        <Routes>
+          <Route path="/feedbackDetail" element={<FeedBackDetail />} />
+        </Routes>
       </div>
     </>
   );

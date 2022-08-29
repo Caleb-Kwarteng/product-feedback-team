@@ -1,13 +1,15 @@
 import "../../App.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, useState } from "react";
+import { Link, Route, Routes } from "react-router-dom";
+import LoginPage from "../../containers/login/LoginPage";
 const SignUpForm = ({ setAuth }) => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  //Logic to add user details
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -95,7 +97,10 @@ const SignUpForm = ({ setAuth }) => {
                 Sign up
               </button>
               <span className="form-input-login">
-                Already have an account? <Link to="/signup">Login Here</Link>
+                Already have an account?{" "}
+                <p type="button" onClick={navigateToLogin}>
+                  Login Here
+                </p>
               </span>
             </form>
           </div>
