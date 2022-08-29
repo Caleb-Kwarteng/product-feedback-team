@@ -26,7 +26,6 @@ const NewFeedBackForm = ({
             justifyContent: "center",
             flexDirection: "column",
           }}
-          className=""
         >
           <h5
             className="p-4 my-5 mx-5"
@@ -128,7 +127,7 @@ const NewFeedBackForm = ({
                 ></textarea>
               </div>
 
-              <div class="mb-3 mt-3 p-4 btnDiv">
+              <div className="mb-3 mt-3 p-4 btnDiv">
                 <div>
                   <CancelBtn />
                 </div>{" "}

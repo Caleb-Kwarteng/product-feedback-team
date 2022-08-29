@@ -7,14 +7,46 @@ import "./roadmap.css";
 
 const RoadmapMain = () => {
   return (
-    <div className="roadmap-container">
+    <>
+      <div className="container">
+        {/* Nav DIv */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            backgroundColor: "#373F68",
+            color: "white",
+            borderRadius: "10px",
+            msFlexDirection: "row",
+          }}
+        >
+          <div>
+            <p>&lt; Go Back</p>
+          </div>
+          <div>
+            {" "}
+            <button
+              style={{ backgroundColor: "#AD1FEA", color: "white" }}
+              className="btn"
+              type="submit"
+              value=" + Add Feedback"
+            >
+              {" "}
+              + Add Feedback
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+    /**<div className="roadmap-container">
       <Nav />
       <div className="roadmap-grid">
         <Planned />
         <InProgress />
         <Live />
       </div>
-    </div>
+    </div> */
   );
 };
 

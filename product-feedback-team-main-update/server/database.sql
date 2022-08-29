@@ -35,3 +35,16 @@ ALTER TABLE "comments" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 ALTER TABLE "product_features" ADD FOREIGN KEY ("comments_id") REFERENCES "comments" ("id");
 
 ALTER TABLE "replies" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE product_features
+ALTER COLUMN status
+SET DEFAULT 'suggestion'
+
+ALTER TABLE product_features
+ALTER COLUMN upvotes
+SET DEFAULT 0
+
+//When a feedback is edited, we can update the status column with the new status - along with other columns 
+UPDATE product_features
+SET status = 'planned'
+WHERE id = 3

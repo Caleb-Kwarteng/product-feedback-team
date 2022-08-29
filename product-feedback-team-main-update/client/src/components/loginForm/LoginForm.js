@@ -28,7 +28,7 @@ const LoginForm = ({ setAuth }) => {
         <div className="row">
           <div className="col pt-5 mx-5">
             <h1 className="p-5 pt-5 my-5 text-center">LOGIN HERE</h1>{" "}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="mx-5">
               <div className="mb-3">
                 <label className="form-label">Username</label>
                 <input

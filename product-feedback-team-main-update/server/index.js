@@ -16,40 +16,17 @@ app.use("/auth", require("./routes/jwtAuth"));
 app.use("/dashboard", require("./routes/dashboard"));
 
 const pool = require("./db");
-const helper = require("./Helper");
+
 //var bcrypt = require("bcryptjs");
 //var jwt = require("jsonwebtoken");
 const auth = require("./auth");
 
 const productRequest = async (req, res) => {
-  /**auth.verify(req, res, async () => {
-    try {
-      const { title, category, description, status, upvotes } = req.body;
-
-      pool.query(
-        "INSERT INTO product_features (title,category,description,status,upvotes) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-        [title, category, description, status, upvotes],
-        (error, results) => {
-          if (error) {
-            res.send(error.message);
-
-            throw error;
-          }
-
-          res
-            .status(201)
-            .send(`product request added with ID: ${results.rows[0].id}`);
-        }
-      );
-    } catch (err) {
-      res.send(err.message);
-    }
-  }); */
   try {
-    const { title, category, description, status, upvotes } = req.body;
+    const { title, category, description } = req.body;
     const submitFeedback = await pool.query(
-      "INSERT INTO product_features (title,category,description,status,upvotes) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-      [title, category, description, status, upvotes]
+      "INSERT INTO product_features (title,category,description) VALUES ($1,$2,$3) RETURNING *",
+      [title, category, description]
     );
 
     res.json(submitFeedback);
