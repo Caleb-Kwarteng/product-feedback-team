@@ -97,10 +97,7 @@ const SignUpForm = ({ setAuth }) => {
                 Sign up
               </button>
               <span className="form-input-login">
-                Already have an account?{" "}
-                <p type="button" onClick={navigateToLogin}>
-                  Login Here
-                </p>
+                Already have an account? <p>Login Here</p>
               </span>
             </form>
           </div>
