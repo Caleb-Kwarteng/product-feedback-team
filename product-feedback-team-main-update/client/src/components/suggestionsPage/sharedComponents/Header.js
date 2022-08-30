@@ -10,7 +10,7 @@ const Header = ({ feedbacks }) => {
   };
   return (
     <>
-      <div className="header p-3" style={{ width: "825px" }}>
+      <div className="header p-3">
         <div>{feedbacks.length} Suggestions</div>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <p>Sort by :</p>
