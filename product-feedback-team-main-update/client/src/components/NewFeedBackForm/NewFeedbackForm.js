@@ -67,7 +67,7 @@ const NewFeedBackForm = ({
                 />
               </div>
               <div className="mb-3 p-4">
-                <label class="form-label">Category</label>
+                <label className="form-label">Category</label>
                 <br />
                 Choose a category for your feedback
                 <select
@@ -75,34 +75,34 @@ const NewFeedBackForm = ({
                   aria-label="Default select example"
                   style={{ background: "#F7F8FD" }}
                 >
-                  <option selected>All</option>
+                  <option defaultValue={"All"}>All</option>
                   <option
-                    value="1"
-                    onSelect={(e) => setCategory(e.target.value)}
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
                   >
                     Feature
                   </option>
                   <option
-                    value="2"
-                    onSelect={(e) => setCategory(e.target.value)}
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
                   >
                     UI
                   </option>
                   <option
-                    value="3"
-                    onSelect={(e) => setCategory(e.target.value)}
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
                   >
                     UX
                   </option>
                   <option
-                    value="4"
-                    onSelect={(e) => setCategory(e.target.value)}
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
                   >
                     Bug
                   </option>
                   <option
-                    value="5"
-                    onSelect={(e) => setCategory(e.target.value)}
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
                   >
                     Enhancement
                   </option>

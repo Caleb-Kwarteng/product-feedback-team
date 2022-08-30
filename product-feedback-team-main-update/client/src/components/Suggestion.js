@@ -9,6 +9,7 @@ import UIBtn from "./buttons/UIBtn";
 import UXBtn from "./buttons/UXBtn";
 import BugBtn from "./buttons/BugBtn";
 import { useState } from "react";
+import SuggestionBtn from "./buttons/SuggestionBtn";
 const Suggestion = ({ feedback }) => {
   //Upvote state
   const [vote, setUpvotes] = useState(0);
@@ -34,7 +35,7 @@ const Suggestion = ({ feedback }) => {
       case "Bug":
         return <BugBtn />;
       default:
-        return "Not an option";
+        return <SuggestionBtn />;
     }
   };
   return (

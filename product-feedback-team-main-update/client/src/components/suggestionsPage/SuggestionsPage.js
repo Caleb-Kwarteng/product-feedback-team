@@ -10,6 +10,7 @@ import Header from "./sharedComponents/Header";
 import Roadmap from "./sharedComponents/Roadmap";
 
 import { useEffect, useState } from "react";
+import EmptySuggestions from "./sharedComponents/EmptySuggestions";
 
 const SuggestionsPage = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -81,9 +82,13 @@ const SuggestionsPage = () => {
               <Header feedbacks={feedbacks} />
             </div>
             <div>
-              {feedbacks.map((feedback) => (
-                <Suggestion key={feedback.id} feedback={feedback} />
-              ))}
+              {feedbacks.length == 0 ? (
+                <EmptySuggestions />
+              ) : (
+                feedbacks.map((feedback) => (
+                  <Suggestion key={feedback.id} feedback={feedback} />
+                ))
+              )}
             </div>
           </div>
         </div>

@@ -10,10 +10,19 @@ const Header = ({ feedbacks }) => {
   };
   return (
     <>
-      <div className="header p-3">
+      <div className="header p-3" style={{ width: "825px" }}>
         <div>{feedbacks.length} Suggestions</div>
-        <div>
-          <p>Sort by : </p>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <p>Sort by :</p>
+          <select
+            class="form-select form-select-sm"
+            aria-label="Default select example"
+          >
+            <option selected>Most Upvotes</option>
+            <option value="1">Least Upvotes</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
         </div>
         <div>
           <button
