@@ -1,7 +1,33 @@
 import { useNavigate, Routes, Route } from "react-router-dom";
 import EditFeedback from "../added features/edit-feedback-page/EditFeedback";
+import Axios from "axios";
 
 const FeedBackDetail = ({ feedback }) => {
+  const myId = feedback.id;
+  const getSingleFeedback = () => {
+    Axios.get("http://localhost:4001/get-feedback/", {
+      params: { id: myId },
+    }).then((response) => {
+      console.log(response);
+    });
+  };
+  /** const [sinlgeFeedback, setFeedback] = useState([]);
+  //Function to make get requests
+  const getSingleProduct = async () => {
+    try {
+      const response = await fetch("http://localhost:4001/get-feedback/:id");
+      const jsonData = await response.json();
+      setFeedback(jsonData);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    getSingleProduct();
+  }, []); */
+
+  //console.log(sinlgeFeedback(myId));
   const backNav = useNavigate();
   const navigateBack = () => {
     backNav("/dashboard");
@@ -12,6 +38,7 @@ const FeedBackDetail = ({ feedback }) => {
   };
   return (
     <>
+      {/* <button onClick={getSingleFeedback(myId)}>Click Me</button> */}
       <div className="container">
         <div
           className="container my-5"

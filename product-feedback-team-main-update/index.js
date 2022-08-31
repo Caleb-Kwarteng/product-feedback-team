@@ -29,7 +29,7 @@ const productRequest = async (req, res) => {
       [title, category, description]
     );
 
-    res.json(submitFeedback);
+    res.json(submitFeedback.rows);
   } catch (err) {
     console.error(err.message);
   }
@@ -37,20 +37,17 @@ const productRequest = async (req, res) => {
 
 const createComment = async (req, res) => {
   auth.verify(req, res, async () => {
-    const { content, user_id } = req.body.content;
-    pool.query(
-      "INSERT INTO comments (content,user_id) VALUES ($1,$2) RETURNING *",
-      [content, user_id],
-      (error, results) => {
-        if (error) {
-          res.send(error.message);
-          throw error;
-        }
-        res
-          .status(201)
-          .send(`comment add successfully with ID: ${results.rows[0].id}`);
-      }
-    );
+    try {
+      const { content, user_id, product_id } = req.body;
+      let newComments = await pool.query(
+        "INSERT INTO comments (content,user_id,product_id) VALUES ($1,$2,$3) RETURNING *",
+        [content, user_id, product_id]
+      );
+
+      res.status(201).json(newComments.rows);
+    } catch (error) {
+      res.send(error.message);
+    }
   });
 };
 
@@ -94,64 +91,60 @@ const deleteFeedback = (req, res) => {
 };
 
 const getFeedback = async (req, res) => {
-  auth.verify(req, res, async () => {
-    const id = req.params.id;
+  const id = req.params.id;
 
-    var products = [];
-    var sqlResults = await pool.query(
-      "SELECT * FROM product_features WHERE id = $1",
-      [id]
+  var products = [];
+  var sqlResults = await pool.query(
+    "SELECT * FROM product_features WHERE id = $1",
+    [id]
+  );
+
+  try {
+    products = [...sqlResults.rows];
+
+    let newProducts = await Promise.all(
+      products.map(async (val, ind, arr) => {
+        var __res = await getCommentPerProduct(val.id);
+        let currentObj = arr[ind];
+        return (val = { ...val, comments: [...__res] });
+      })
     );
 
-    try {
-      products = [...sqlResults.rows];
+    products = [...newProducts];
 
-      let newProducts = await Promise.all(
-        products.map(async (val, ind, arr) => {
-          var __res = await getCommentPerProduct(val.id);
-          let currentObj = arr[ind];
-          return (val = { ...val, comments: [...__res] });
-        })
-      );
-
-      products = [...newProducts];
-
-      console.log("new products", newProducts);
-    } catch (error) {
-      res.send(error.message);
-      throw error;
-    }
-  });
+    console.log("new products", newProducts);
+  } catch (error) {
+    res.send(error.message);
+    throw error;
+  }
 
   return res.status(200).json(products);
 };
 
 const getAllFeedback = async (req, res) => {
-  auth.verify(req, res, async () => {
-    var products = [];
-    var sqlResults = await pool.query("SELECT * FROM product_features");
+  var products = [];
+  var sqlResults = await pool.query("SELECT * FROM product_features");
 
-    try {
-      products = [...sqlResults.rows];
+  try {
+    products = [...sqlResults.rows];
 
-      let newProducts = await Promise.all(
-        products.map(async (val, ind, arr) => {
-          var __res = await getCommentPerProduct(val.id);
-          let currentObj = arr[ind];
-          return (val = { ...val, comments: [...__res] });
-        })
-      );
+    let newProducts = await Promise.all(
+      products.map(async (val, ind, arr) => {
+        var __res = await getCommentPerProduct(val.id);
+        let currentObj = arr[ind];
+        return (val = { ...val, comments: [...__res] });
+      })
+    );
 
-      products = [...newProducts];
+    products = [...newProducts];
 
-      console.log("new yoyo products", newProducts);
-    } catch (error) {
-      res.send(error.message);
-      throw error;
-    }
+    console.log("new yoyo products", newProducts);
+  } catch (error) {
+    res.send(error.message);
+    throw error;
+  }
 
-    return res.status(200).json(products);
-  });
+  return res.status(200).json(products);
 };
 
 const getSuggestion = (req, res) => {
@@ -213,7 +206,7 @@ async function getUserPerComment(id) {
 const addFeedback = async (req, res) => {
   auth.verify(req, res, async () => {
     const { content, replyingTo, userId } = req.body;
-    await pool.query(
+    pool.query(
       "INSERT INTO replies (content,replying_to,user_id) VALUES ($1,$2,$3) RETURNING *",
       [content, replyingTo, userId],
       (error, result) => {
@@ -256,32 +249,30 @@ async function getUserReplies(user_id) {
 }
 
 const getRoadmap = async (req, res) => {
-  auth.verify(req, res, async () => {
-    let roadmaps = [];
+  let roadmaps = [];
 
-    let roadmap = await pool.query("SELECT * FROM product_features");
-    try {
-      roadmaps = [...roadmap.rows];
+  let roadmap = await pool.query("SELECT * FROM product_features");
+  try {
+    roadmaps = [...roadmap.rows];
 
-      let newProducts = await Promise.all(
-        roadmaps.map(async (val, ind, arr) => {
-          var __res = await await await getCommentPerProductTwo(val.id);
-          let currentObj = arr[ind];
+    let newProducts = await Promise.all(
+      roadmaps.map(async (val, ind, arr) => {
+        var __res = await await await getCommentPerProductTwo(val.id);
+        let currentObj = arr[ind];
 
-          return (val = { ...val, comments: [...__res] });
-        })
-      );
+        return (val = { ...val, comments: [...__res] });
+      })
+    );
 
-      roadmaps = [...newProducts];
+    roadmaps = [...newProducts];
 
-      console.log("new  products", roadmaps);
-    } catch (error) {
-      res.send(error.message);
-      throw error;
-    }
+    console.log("new  products", roadmaps);
+  } catch (error) {
+    res.send(error.message);
+    throw error;
+  }
 
-    return res.status(200).json(roadmaps);
-  });
+  return res.status(200).json(roadmaps);
 };
 
 async function getCommentPerProductTwo(product_id) {
@@ -299,6 +290,20 @@ async function getCommentPerProductTwo(product_id) {
   return comments;
 }
 
+const increaseUpvote = async (req, res) => {
+  const comment_id = req.params.id;
+  const upvoteValue = req.body;
+  let upvoteUpdate = await pool.query(
+    "UPDATE product_features SET upvotes = $1 WHERE id = $2",
+    [upvoteValue, comment_id]
+  );
+  try {
+    res.json(upvoteUpdate.rows);
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
 //routes
 
 app.post("/create-comment", createComment);
@@ -311,6 +316,7 @@ app.get("/get-feedback/:id", getFeedback);
 app.get("/get-suggestion/:status", getSuggestion);
 app.get("/roadmap", getRoadmap);
 app.get("/add-replies", addFeedback);
+app.put("/update-upvote", increaseUpvote);
 
 //Start server
 app.listen(4001, () => {
