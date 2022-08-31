@@ -18,6 +18,21 @@ const NewFeedBackForm = ({
   };
   return (
     <>
+      {" "}
+      <h5
+        className="p-4"
+        style={{
+          display: "flex",
+          alignItems: "flex-start",
+          alignContent: "flex-start",
+          cursor: "pointer",
+          textAlign: "left",
+        }}
+        type="button"
+        onClick={navigateToDash}
+      >
+        &lt; Go Back
+      </h5>
       <div className="container ">
         <div
           style={{
@@ -27,17 +42,6 @@ const NewFeedBackForm = ({
             flexDirection: "column",
           }}
         >
-          <h5
-            className="p-4 my-5 mx-5"
-            style={{
-              cursor: "pointer",
-              textAlign: "left",
-            }}
-            type="button"
-            onClick={navigateToDash}
-          >
-            &lt; Go Back
-          </h5>
           <Routes>
             <Route path="/dashboard" element={<FeedbackDetailPage />} />
           </Routes>

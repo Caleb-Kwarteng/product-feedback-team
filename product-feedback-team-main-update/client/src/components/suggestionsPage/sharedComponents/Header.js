@@ -14,7 +14,7 @@ const Header = ({ feedbacks }) => {
         <div>{feedbacks.length} Suggestions</div>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <p>Sort by :</p>
-          <select
+          {/*  <select
             class="form-select form-select-sm"
             aria-label="Default select example"
           >
@@ -22,7 +22,7 @@ const Header = ({ feedbacks }) => {
             <option value="1">Least Upvotes</option>
             <option value="2">Two</option>
             <option value="3">Three</option>
-          </select>
+          </select> */}
         </div>
         <div>
           <button
